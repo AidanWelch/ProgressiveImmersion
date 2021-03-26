@@ -1,0 +1,1 @@
+browserAction.setBadgeText 
