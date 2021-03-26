@@ -1,0 +1,22 @@
+{
+  "name": "progressiveimmersion",
+  "version": "1.0.0",
+  "description": "A browser extension for pregreesive immersion in a language.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AidanWelch/ProgressiveImmersion.git"
+  },
+  "keywords": [
+    "language",
+    "learning",
+    "browser",
+    "extension",
+    "polyfill"
+  ],
+  "author": "Aidan Welch",
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/AidanWelch/ProgressiveImmersion",
+  "devDependencies": {
+    "webextension-polyfill": "^0.7.0"
+  }
+}
