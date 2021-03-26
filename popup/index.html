@@ -4,10 +4,37 @@
     <head>
         <meta charset="utf-8">
         <link rel="stylesheet" href="index.css"/>
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"> 
     </head>
 
     <body>
-        <img src="../images/logo-48.png">
-        <h1>Progressive Immersion</h1>
+        <div class="w3-bar">
+            <img src="../images/logo-48.png" class="w3-padding w3-bar-item">
+            <h2 class="w3-bar-item">Progressive Immersion</h2>
+            <label class="switch w3-bar-item w3-margin w3-padding-large">
+                <input type="checkbox" id="on-switch">
+                <span class="slider"></span>
+            </label>
+        </div>
+
+        <table class="w3-table">
+            <tr>
+                <th class="w3-right-align w3-padding-16">
+                    Translate from:
+                </th>
+                <td class="w3-left-align">
+                    <a class="w3-button" id="origin-language-button" href="language-select.html#origin">English</a>
+                </td>
+            </tr>
+            <tr>
+                <th class="w3-right-align w3-padding-16">
+                    Translate to:
+                </th>
+                <td class="w3-left-align">
+                    <a class="w3-button" id="foreign-language-button" href="language-select.html#foreign">Spanish</a>
+                </td>
+            </tr>
+        </table>
+        <script src="index.js"></script>
     </body>
 </html>
