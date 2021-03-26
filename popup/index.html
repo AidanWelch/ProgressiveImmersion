@@ -12,7 +12,7 @@
             <img src="../images/logo-48.png" class="w3-padding w3-bar-item">
             <h2 class="w3-bar-item">Progressive Immersion</h2>
             <label class="switch w3-bar-item w3-margin w3-padding-large">
-                <input type="checkbox" id="on-switch">
+                <input type="checkbox" id="onSwitch">
                 <span class="slider"></span>
             </label>
         </div>
@@ -23,7 +23,7 @@
                     Translate from:
                 </th>
                 <td class="w3-left-align">
-                    <a class="w3-button" id="origin-language-button" href="language-select.html#origin">English</a>
+                    <a class="w3-button" href="language-select.html#origin">English</a>
                 </td>
             </tr>
             <tr>
@@ -31,10 +31,22 @@
                     Translate to:
                 </th>
                 <td class="w3-left-align">
-                    <a class="w3-button" id="foreign-language-button" href="language-select.html#foreign">Spanish</a>
+                    <a class="w3-button" href="language-select.html#foreign">Spanish</a>
+                </td>
+            </tr>
+            <tr>
+                <th id="updateSliderText">
+                    New words every 12.0 hours
+                </th>
+                <td>
+                    <div class="range-slide-container">
+                        <input type="range" min="0.5" max="48" value="12.0" class="range-slider" id="updateSlider" step="0.5">
+                    </div>
                 </td>
             </tr>
         </table>
+
+        
         <script src="index.js"></script>
     </body>
 </html>

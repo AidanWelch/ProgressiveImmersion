@@ -1,9 +1,10 @@
 var state;
+var updateFrequency = 12.0;
 browser.browserAction.setBadgeBackgroundColor({color: "white"});
 
 browser.storage.local.get("state").then((value) => {
     state = value.state;
-    document.getElementById("on-switch").checked = state;
+    document.getElementById("onSwitch").checked = state;
 });
 
 function updateBadgeState(){
@@ -16,8 +17,13 @@ function updateBadgeState(){
     }
 }
 
-document.getElementById("on-switch").addEventListener("click", () => {
-    state = document.getElementById("on-switch").checked;
+document.getElementById("onSwitch").addEventListener("click", () => {
+    state = document.getElementById("onSwitch").checked;
     updateBadgeState();
     browser.storage.local.set({state: state});
 });
+
+document.getElementById("updateSlider").oninput = () => {
+    updateFrequency = parseFloat(document.getElementById("updateSlider").value);
+    document.getElementById("updateSliderText").innerHTML = `New words every ${updateFrequency.toPrecision(3)} hours`;
+};
