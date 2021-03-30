@@ -16,8 +16,17 @@
                 <span class="slider"></span>
             </label>
         </div>
-
         <table class="w3-table">
+            <tr>
+                <th id="updateSliderText">
+                    New words every 12.0 hours
+                </th>
+                <td>
+                    <div class="range-slide-container">
+                        <input type="range" min="0.5" max="48" value="12.0" class="range-slider" id="updateSlider" step="0.5">
+                    </div>
+                </td>
+            </tr>
             <tr>
                 <th class="w3-right-align w3-padding-16">
                     Translate from:
@@ -32,21 +41,25 @@
                 </th>
                 <td class="w3-left-align">
                     <a class="w3-button" href="language-select.html#foreign">Spanish</a>
+                    <button class="w3-button">[Dictionary]</button>
                 </td>
             </tr>
             <tr>
-                <th id="updateSliderText">
-                    New words every 12.0 hours
-                </th>
-                <td>
-                    <div class="range-slide-container">
-                        <input type="range" min="0.5" max="48" value="12.0" class="range-slider" id="updateSlider" step="0.5">
-                    </div>
-                </td>
+                    <td class="w3-padding" style="margin-left: 900px;">
+                        <label class="check-container">Whitelist:
+                            <input id="whitelistCheck" type="radio" name="exclusionListSetting" value="whitelist">
+                            <span class="checkmark"></span>
+                        </label>
+                    </td>
+                    <td class="w3-padding">
+                        <label class="check-container">Blacklist:
+                            <input id="blacklistCheck" type="radio" name="exclusionListSetting" value="blacklist" checked>
+                            <span class="checkmark"></span>
+                        </label>
+                    </td>
             </tr>
         </table>
-
-        
+        <textarea class="w3-input w3-border w3-light-grey" id="exclusionList" rows="5" placeholder="Put each entry on its own line; do not include the protocol(http/https)."></textarea>
         <script src="index.js"></script>
     </body>
 </html>
