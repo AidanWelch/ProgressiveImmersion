@@ -7,6 +7,14 @@ browser.storage.local.get("state").then((value) => {
     document.getElementById("onSwitch").checked = state;
 });
 
+browser.storage.local.get("originNativeName").then((value) => {
+    document.getElementById("originButton").innerHTML = value.originNativeName;
+});
+
+browser.storage.local.get("targetNativeName").then((value) => {
+    document.getElementById("targetButton").innerHTML = value.targetNativeName;
+});
+
 function updateBadgeState(){
     if(state){
         browser.browserAction.setBadgeText({text: "On"});
