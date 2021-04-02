@@ -15,6 +15,14 @@ browser.storage.local.get("targetNativeName").then((value) => {
     document.getElementById("targetButton").innerHTML = value.targetNativeName;
 });
 
+browser.storage.local.get("exclusionListMode").then((value) => {
+    if (value.exclusionListMode === "whitelist"){
+        document.getElementById(whitelistCheck).checked = true;
+    } else {
+        document.getElementById(blacklistCheck).checked = true;
+    }
+});
+
 function updateBadgeState(){
     if(state){
         browser.browserAction.setBadgeText({text: "On"});
