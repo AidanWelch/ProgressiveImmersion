@@ -25,9 +25,15 @@ document.getElementById("onSwitch").addEventListener("click", () => {
 
 //Update Slider
 
+browser.storage.local.get("updateFrequency").then((value) => {
+    document.getElementById("updateSlider").value = (value.updateFrequency) ? value.updateFrequency : 12.0;
+    document.getElementById("updateSliderText").innerHTML = `New words every ${value.updateFrequency} hours`;
+});
+
 document.getElementById("updateSlider").oninput = () => {
-    updateFrequency = parseFloat(document.getElementById("updateSlider").value);
+    var updateFrequency = parseFloat(document.getElementById("updateSlider").value);
     document.getElementById("updateSliderText").innerHTML = `New words every ${updateFrequency.toPrecision(3)} hours`;
+    browser.storage.local.set({updateFrequency: updateFrequency});
 };
 
 
