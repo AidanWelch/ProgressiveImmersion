@@ -17,9 +17,15 @@ browser.storage.local.get("targetNativeName").then((value) => {
 
 browser.storage.local.get("exclusionListMode").then((value) => {
     if (value.exclusionListMode === "whitelist"){
-        document.getElementById(whitelistCheck).checked = true;
+        document.getElementById("whitelistCheck").checked = true;
     } else {
-        document.getElementById(blacklistCheck).checked = true;
+        document.getElementById("blacklistCheck").checked = true;
+    }
+});
+
+browser.storage.local.get("exclusionList").then((value) => {
+    if (value.exclusionList){
+        document.getElementById("exclusionList").value = value.exclusionList;
     }
 });
 
@@ -43,3 +49,16 @@ document.getElementById("updateSlider").oninput = () => {
     updateFrequency = parseFloat(document.getElementById("updateSlider").value);
     document.getElementById("updateSliderText").innerHTML = `New words every ${updateFrequency.toPrecision(3)} hours`;
 };
+
+document.getElementById("exclusionListMode").oninput = () => {
+    if(document.getElementById("whitelistCheck").checked) {
+        browser.storage.local.set({exclusionListMode: "whitelist"});
+    } else {
+        browser.storage.local.set({exclusionListMode: "blacklist"});
+    }
+};
+
+document.getElementById("exclusionList").addEventListener("input", () => {
+    console.log(document.getElementById("exclusionList").value)
+    browser.storage.local.set({exclusionList: document.getElementById("exclusionList").value});
+});
