@@ -1,32 +1,9 @@
-var state;
-var updateFrequency = 12.0;
+//ON/OFF
 browser.browserAction.setBadgeBackgroundColor({color: "white"});
-
+var state;
 browser.storage.local.get("state").then((value) => {
     state = value.state;
     document.getElementById("onSwitch").checked = state;
-});
-
-browser.storage.local.get("originNativeName").then((value) => {
-    document.getElementById("originButton").innerHTML = value.originNativeName;
-});
-
-browser.storage.local.get("targetNativeName").then((value) => {
-    document.getElementById("targetButton").innerHTML = value.targetNativeName;
-});
-
-browser.storage.local.get("exclusionListMode").then((value) => {
-    if (value.exclusionListMode === "whitelist"){
-        document.getElementById("whitelistCheck").checked = true;
-    } else {
-        document.getElementById("blacklistCheck").checked = true;
-    }
-});
-
-browser.storage.local.get("exclusionList").then((value) => {
-    if (value.exclusionList){
-        document.getElementById("exclusionList").value = value.exclusionList;
-    }
 });
 
 function updateBadgeState(){
@@ -45,10 +22,41 @@ document.getElementById("onSwitch").addEventListener("click", () => {
     browser.storage.local.set({state: state});
 });
 
+
+//Update Slider
+
 document.getElementById("updateSlider").oninput = () => {
     updateFrequency = parseFloat(document.getElementById("updateSlider").value);
     document.getElementById("updateSliderText").innerHTML = `New words every ${updateFrequency.toPrecision(3)} hours`;
 };
+
+
+//Language Selection
+
+browser.storage.local.get("originNativeName").then((value) => {
+    document.getElementById("originButton").innerHTML = value.originNativeName;
+});
+
+browser.storage.local.get("targetNativeName").then((value) => {
+    document.getElementById("targetButton").innerHTML = value.targetNativeName;
+});
+
+
+// Exclusion List
+
+browser.storage.local.get("exclusionListMode").then((value) => {
+    if (value.exclusionListMode === "whitelist"){
+        document.getElementById("whitelistCheck").checked = true;
+    } else {
+        document.getElementById("blacklistCheck").checked = true;
+    }
+});
+
+browser.storage.local.get("exclusionList").then((value) => {
+    if (value.exclusionList){
+        document.getElementById("exclusionList").value = value.exclusionList;
+    }
+});
 
 document.getElementById("exclusionListMode").oninput = () => {
     if(document.getElementById("whitelistCheck").checked) {
