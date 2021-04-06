@@ -1,9 +1,15 @@
 //ON/OFF
+
 browser.browserAction.setBadgeBackgroundColor({color: "white"});
 var state;
 browser.storage.local.get("state").then((value) => {
     state = value.state;
+    if(state === undefined){
+        browser.storage.local.set({state: true});
+        state = true;
+    }
     document.getElementById("onSwitch").checked = state;
+    updateBadgeState();
 });
 
 function updateBadgeState(){

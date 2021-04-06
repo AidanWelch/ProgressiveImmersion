@@ -20,7 +20,7 @@
     "content_scripts": [
         {
             "matches": ["*://*/*"],
-            "js": ["translate.js"]
+            "js": ["content_scripts/main.js", "content_scripts/translate.js", "content_scripts/analyze.js"]
         }
     ]
 }
