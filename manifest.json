@@ -22,5 +22,8 @@
             "matches": ["*://*/*"],
             "js": ["content_scripts/main.js", "content_scripts/translate.js", "content_scripts/analyze.js"]
         }
-    ]
+    ],
+    "background": {
+        "scripts": ["background.js"]
+    }
 }

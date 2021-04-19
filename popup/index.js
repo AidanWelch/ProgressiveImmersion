@@ -5,8 +5,8 @@ var state;
 browser.storage.local.get("state").then((value) => {
     state = value.state;
     if(state === undefined){
-        browser.storage.local.set({state: true});
-        state = true;
+        state = false;
+        browser.storage.local.set({state: state});
     }
     document.getElementById("onSwitch").checked = state;
     updateBadgeState();
