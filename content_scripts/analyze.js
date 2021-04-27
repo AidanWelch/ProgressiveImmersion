@@ -36,13 +36,19 @@ window.onbeforeunload = () => {
     });
 }
 
-var filterMaxShareOfWords = 15;  ///TODO change to stored setting, and percentage of total word occurences
-var filterMinShareOfWords = 1;  ///TODO change to stored setting, and percentage of total word occurences
+var filterMaxShareOfWords = 0.0075;  ///TODO change to stored setting
+var filterMinShareOfWords = 0.001;  ///TODO change to stored setting
 var wordsToSave = 5;  ///TODO change to stored setting
 
 progressiveImmersion.analyzeWordTally = function(){
     var tallyArray = [...progressiveImmersion.wordTally].sort((a, b) => b[1] - a[1]);
-    tallyArray = tallyArray.filter((a) => a[1] <= filterMaxShareOfWords && a[1] >= filterMinShareOfWords);
+    var totalWords = 0;
+    for(var i = 0; i < tallyArray.length; ++i){
+        totalWords += tallyArray[i][1];
+    }
+    for(var i = 0; i < tallyArray.length; ++i){
+        tallyArray[i][3] = tallyArray[i][1]/totalWords;
+    }
+    tallyArray = tallyArray.filter((a) => ((a[1]/totalWords) <= filterMaxShareOfWords) && ((a[1]/totalWords) >= filterMinShareOfWords));
     tallyArray = tallyArray.slice(0, wordsToSave);
-    console.log(tallyArray);
 }
