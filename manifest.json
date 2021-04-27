@@ -9,6 +9,7 @@
     "version": "1.0",
     "permissions": [
         "storage",
+        "unlimitedStorage",
         "https://ssl.gstatic.com/",
         "https://translate.googleapis.com/"
     ],
