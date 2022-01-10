@@ -33,7 +33,10 @@ document.getElementById("onSwitch").addEventListener("click", () => {
 
 browser.storage.local.get("updateFrequency").then((value) => {
     document.getElementById("updateSlider").value = (value.updateFrequency) ? value.updateFrequency : 12.0;
-    document.getElementById("updateSliderText").innerHTML = `New words every ${value.updateFrequency} hours`;
+    document.getElementById("updateSliderText").innerHTML = `New words every ${document.getElementById("updateSlider").value} hours`;
+    if (value.updateFrequency === undefined) {
+        browser.storage.local.set({updateFrequency: 12.0})
+    }
 });
 
 document.getElementById("updateSlider").oninput = () => {
