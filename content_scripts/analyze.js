@@ -42,6 +42,18 @@ var wordsToSave = 5;  ///TODO change to stored setting
 
 progressiveImmersion.analyzeWordTally = function(){
     browser.storage.local.get("wordQueue").then((value) => {
+        if (value.wordQueue === undefined) {
+            value.wordQueue = [];
+        }
+
+        for (let i = 0; i < value.wordQueue.length; i++){
+            let instances = progressiveImmersion.wordTally.get(value.wordQueue[i][0]);
+            if (instances !== undefined){
+                value.wordQueue[i][1] += instances;
+                progressiveImmersion.wordQueue.delete(value.wordQueue[i][0]);
+            }
+        }
+
         var tallyArray = [...progressiveImmersion.wordTally].sort((a, b) => b[1] - a[1]);
         var totalWords = 0;
         for(var i = 0; i < tallyArray.length; ++i){
