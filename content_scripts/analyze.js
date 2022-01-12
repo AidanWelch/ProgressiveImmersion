@@ -50,7 +50,7 @@ progressiveImmersion.analyzeWordTally = function(){
             let instances = progressiveImmersion.wordTally.get(value.wordQueue[i][0]);
             if (instances !== undefined){
                 value.wordQueue[i][1] += instances;
-                progressiveImmersion.wordQueue.delete(value.wordQueue[i][0]);
+                progressiveImmersion.wordTally.delete(value.wordQueue[i][0]);
             }
         }
 
@@ -60,9 +60,20 @@ progressiveImmersion.analyzeWordTally = function(){
             totalWords += tallyArray[i][1];
         }
         for(var i = 0; i < tallyArray.length; ++i){
-            tallyArray[i][3] = tallyArray[i][1]/totalWords;
+            tallyArray[i][3] = tallyArray[i][1]/totalWords;  //why is this [3]?
         }
         tallyArray = tallyArray.filter((a) => ((a[1]/totalWords) <= filterMaxShareOfWords) && ((a[1]/totalWords) >= filterMinShareOfWords));
         tallyArray = tallyArray.slice(0, wordsToSave);
+        for (let i = 0; i < tallyArray.length; i++){
+            if (value.wordQueue.length < 100) {
+                value.wordQueue.push(tallyArray[i]);
+            } else {
+                if (value.wordQueue[99][1] < 100){
+                    value.wordQueue[99] = tallyArray[i]
+                }
+            }
+        }
+
+        browser.storage.local.set({wordQueue: value.wordQueue});
     });
 }
