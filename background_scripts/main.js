@@ -24,5 +24,5 @@ function awaitNextWord(latestWordTime){
             latestWordTime = time;
         }
     })
-    setTimeout(awaitNextWord(latestWordTime), time + 1800000) // A 30 minute increment
+    setTimeout(awaitNextWord.bind(null, latestWordTime), time + 1800000) // A 30 minute increment
 }
