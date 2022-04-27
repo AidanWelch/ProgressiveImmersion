@@ -7,7 +7,7 @@ browser.storage.local.get(["state", "wordpack", "wordpack_index"]).then((value) 
             for(var i = 0; i < elems.length; i++){
                 if(elems.item(i).textContent){
                     progressiveImmersion.trackElement(elems.item(i));
-                    //progressiveImmersion.translate(elems.item(i));
+                    progressiveImmersion.translate(elems.item(i));
                 }
             }
         });
