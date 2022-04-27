@@ -16,7 +16,7 @@ browser.storage.local.get(["state", "latestWordTime"]).then((value) => {
 });
 
 function awaitNextWord(latestWordTime){
-    let time = Date.now();
+    const time = Date.now();
     browser.storage.local.get(["state", "updateFrequency"]).then((value) => {
         if (value.state && time >= latestWordTime + ((value.updateFrequency) ? value.updateFrequency : 0)){
             //do dictionary updating here

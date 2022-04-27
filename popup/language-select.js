@@ -1,9 +1,9 @@
 document.getElementById("title").innerHTML = 
     (window.location.hash === "#origin") ? "Source Language" : "Target Language";
 
-var languageList = document.getElementById("languageList");
+const languageList = document.getElementById("languageList");
 
-var xhr = new XMLHttpRequest();
+const xhr = new XMLHttpRequest();
 
 xhr.open("GET", "https://ssl.gstatic.com/inputtools/js/ln/17/en.js", true);
 xhr.onreadystatechange = () => {

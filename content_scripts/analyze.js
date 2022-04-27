@@ -2,7 +2,7 @@ progressiveImmersion.trackElement = function (elem){
     progressiveImmersion.viewObserver.observe(elem);
 }
 
-var minWordLength = 3;  ///TODO change to stored setting
+const minWordLength = 3;  ///TODO change to stored setting
 
 progressiveImmersion.viewObserver = new IntersectionObserver((entries) =>{
     entries.forEach(entry => {
@@ -36,9 +36,9 @@ window.onbeforeunload = () => {
     });
 }
 
-var filterMaxShareOfWords = 0.0075;  ///TODO change to stored setting
-var filterMinShareOfWords = 0.001;  ///TODO change to stored setting
-var wordsToSave = 5;  ///TODO change to stored setting
+const filterMaxShareOfWords = 0.0075;  ///TODO change to stored setting
+const filterMinShareOfWords = 0.001;  ///TODO change to stored setting
+const wordsToSave = 5;  ///TODO change to stored setting
 
 progressiveImmersion.analyzeWordTally = function(){
     browser.storage.local.get("wordQueue").then((value) => {
@@ -46,10 +46,10 @@ progressiveImmersion.analyzeWordTally = function(){
             value.wordQueue = [];
         }
 
-        let time = Date.now();
+        const time = Date.now();
 
         for (let i = 0; i < value.wordQueue.length; i++){
-            let instances = progressiveImmersion.wordTally.get(value.wordQueue[i][0]);
+            const instances = progressiveImmersion.wordTally.get(value.wordQueue[i][0]);
             if (instances !== undefined){
                 value.wordQueue[i][1] += instances;
                 value.wordQueue[i][2] = time;
@@ -57,8 +57,8 @@ progressiveImmersion.analyzeWordTally = function(){
             }
         }
 
-        var tallyArray = [...progressiveImmersion.wordTally].sort((a, b) => b[1] - a[1]);
-        var totalWords = 0;
+        const tallyArray = [...progressiveImmersion.wordTally].sort((a, b) => b[1] - a[1]);
+        let totalWords = 0;
         for(var i = 0; i < tallyArray.length; ++i){
             totalWords += tallyArray[i][1];
         }

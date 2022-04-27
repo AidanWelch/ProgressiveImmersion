@@ -1,7 +1,7 @@
 //ON/OFF
 
 browser.browserAction.setBadgeBackgroundColor({color: "white"});
-var state;
+let state;
 browser.storage.local.get("state").then((value) => {
     state = value.state;
     if(state === undefined){
