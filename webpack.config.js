@@ -26,7 +26,6 @@ module.exports = [
 			})
 		],
 		devServer: {
-			//open: false,
 			hot: false,
 			port: 8000,
 			allowedHosts: 'auto',
