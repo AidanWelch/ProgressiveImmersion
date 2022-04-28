@@ -1,3 +1,3 @@
 function updateDictionary(){
-    browser.storage.local.get([ "wordpack", "wordpackIndex", ])
+	browser.storage.local.get([ "wordpack", "wordpackIndex", ])
 }

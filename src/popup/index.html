@@ -1,65 +1,65 @@
 <!DOCTYPE html>
 
 <html>
-    <head>
-        <meta charset="utf-8">
-        <link rel="stylesheet" href="index.css"/>
-        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"> 
-    </head>
+	<head>
+		<meta charset="utf-8">
+		<link rel="stylesheet" href="index.css"/>
+		<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"> 
+	</head>
 
-    <body>
-        <div class="w3-bar">
-            <img src="../images/logo-48.png" class="w3-padding w3-bar-item">
-            <h2 class="w3-bar-item">Progressive Immersion</h2>
-            <label class="switch w3-bar-item w3-margin w3-padding-large">
-                <input type="checkbox" id="onSwitch">
-                <span class="slider"></span>
-            </label>
-        </div>
-        <table class="w3-table">
-            <tr>
-                <th id="updateSliderText">
-                    New words every 12.0 hours
-                </th>
-                <td>
-                    <div class="range-slide-container">
-                        <input type="range" min="0.5" max="96" value="12.0" class="range-slider" id="updateSlider" step="0.5">
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <th class="w3-right-align w3-padding-16">
-                    Translate from:
-                </th>
-                <td class="w3-left-align">
-                    <a id="originButton" class="w3-button" href="language-select.html#origin"></a>
-                </td>
-            </tr>
-            <tr>
-                <th class="w3-right-align w3-padding-16">
-                    Translate to:
-                </th>
-                <td class="w3-left-align">
-                    <a id="targetButton" class="w3-button" href="language-select.html#target"></a>
-                    <button class="w3-button">[Dictionary]</button>
-                </td>
-            </tr>
-            <tr id="exclusionListMode">
-                    <td class="w3-padding" style="margin-left: 900px;">
-                        <label class="check-container">Whitelist:
-                            <input id="whitelistCheck" type="radio" name="exclusionListMode" value="whitelist">
-                            <span class="checkmark"></span>
-                        </label>
-                    </td>
-                    <td class="w3-padding">
-                        <label class="check-container">Blacklist:
-                            <input id="blacklistCheck" type="radio" name="exclusionListMode" value="blacklist">
-                            <span class="checkmark"></span>
-                        </label>
-                    </td>
-            </tr>
-        </table>
-        <textarea class="w3-input w3-border w3-light-grey" id="exclusionList" rows="5" placeholder="Put each entry on its own line; do not include the protocol(http/https)."></textarea>
-        <script src="index.js"></script>
-    </body>
+	<body>
+		<div class="w3-bar">
+			<img src="../images/logo-48.png" class="w3-padding w3-bar-item">
+			<h2 class="w3-bar-item">Progressive Immersion</h2>
+			<label class="switch w3-bar-item w3-margin w3-padding-large">
+				<input type="checkbox" id="onSwitch">
+				<span class="slider"></span>
+			</label>
+		</div>
+		<table class="w3-table">
+			<tr>
+				<th id="updateSliderText">
+					New words every 12.0 hours
+				</th>
+				<td>
+					<div class="range-slide-container">
+						<input type="range" min="0.5" max="96" value="12.0" class="range-slider" id="updateSlider" step="0.5">
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<th class="w3-right-align w3-padding-16">
+					Translate from:
+				</th>
+				<td class="w3-left-align">
+					<a id="originButton" class="w3-button" href="language-select.html#origin"></a>
+				</td>
+			</tr>
+			<tr>
+				<th class="w3-right-align w3-padding-16">
+					Translate to:
+				</th>
+				<td class="w3-left-align">
+					<a id="targetButton" class="w3-button" href="language-select.html#target"></a>
+					<button class="w3-button">[Dictionary]</button>
+				</td>
+			</tr>
+			<tr id="exclusionListMode">
+					<td class="w3-padding" style="margin-left: 900px;">
+						<label class="check-container">Whitelist:
+							<input id="whitelistCheck" type="radio" name="exclusionListMode" value="whitelist">
+							<span class="checkmark"></span>
+						</label>
+					</td>
+					<td class="w3-padding">
+						<label class="check-container">Blacklist:
+							<input id="blacklistCheck" type="radio" name="exclusionListMode" value="blacklist">
+							<span class="checkmark"></span>
+						</label>
+					</td>
+			</tr>
+		</table>
+		<textarea class="w3-input w3-border w3-light-grey" id="exclusionList" rows="5" placeholder="Put each entry on its own line; do not include the protocol(http/https)."></textarea>
+		<script src="index.js"></script>
+	</body>
 </html>

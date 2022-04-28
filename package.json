@@ -1,32 +1,32 @@
 {
-  "name": "progressiveimmersion",
-  "version": "1.0.0",
-  "description": "A browser extension for progressive immersion in a language.",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/AidanWelch/ProgressiveImmersion.git"
-  },
-  "keywords": [
-    "language",
-    "learning",
-    "browser",
-    "extension",
-    "polyfill"
-  ],
-  "scripts": {
-    "pack": "npx webpack",
-    "start-dev": "web-ext run",
-    "build": "npx webpack && npx web-ext build"
-  },
-  "author": "Aidan Welch",
-  "license": "Apache-2.0",
-  "homepage": "https://github.com/AidanWelch/ProgressiveImmersion",
-  "devDependencies": {
-    "@vitalets/google-translate-api": "^8.0.0",
-    "copy-webpack-plugin": "^10.2.4",
-    "web-ext": "^6.8.0",
-    "webextension-polyfill": "^0.7.0",
-    "webpack": "^5.72.0",
-    "webpack-cli": "^4.9.2"
-  }
+	"name": "progressiveimmersion",
+	"version": "1.0.0",
+	"description": "A browser extension for progressive immersion in a language.",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/AidanWelch/ProgressiveImmersion.git"
+	},
+	"keywords": [
+		"language",
+		"learning",
+		"browser",
+		"extension",
+		"polyfill"
+	],
+	"scripts": {
+		"pack": "npx webpack",
+		"start-dev": "web-ext run",
+		"build": "npx webpack && npx web-ext build"
+	},
+	"author": "Aidan Welch",
+	"license": "Apache-2.0",
+	"homepage": "https://github.com/AidanWelch/ProgressiveImmersion",
+	"devDependencies": {
+		"@vitalets/google-translate-api": "^8.0.0",
+		"copy-webpack-plugin": "^10.2.4",
+		"web-ext": "^6.8.0",
+		"webextension-polyfill": "^0.7.0",
+		"webpack": "^5.72.0",
+		"webpack-cli": "^4.9.2"
+	}
 }
