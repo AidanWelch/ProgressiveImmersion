@@ -1,4 +1,4 @@
-//ON/OFF
+// ON/OFF
 
 browser.browserAction.setBadgeBackgroundColor({color: "white"});
 let state;
@@ -29,7 +29,7 @@ document.getElementById("onSwitch").addEventListener("click", () => {
 });
 
 
-//Update Slider
+// Update Slider
 
 browser.storage.local.get("updateFrequency").then((value) => {
 	document.getElementById("updateSlider").value = (value.updateFrequency) ? value.updateFrequency : 12.0;
@@ -46,7 +46,7 @@ document.getElementById("updateSlider").oninput = () => {
 };
 
 
-//Language Selection
+// Language Selection
 
 browser.storage.local.get("originNativeName").then((value) => {
 	document.getElementById("originButton").innerHTML = value.originNativeName;

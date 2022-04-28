@@ -2,7 +2,7 @@ progressiveImmersion.trackElement = function (elem){
 	progressiveImmersion.viewObserver.observe(elem);
 }
 
-const minWordLength = 3;  ///TODO change to stored setting
+const minWordLength = 3;  /// TODO change to stored setting
 
 progressiveImmersion.viewObserver = new IntersectionObserver((entries) =>{
 	entries.forEach(entry => {
@@ -36,9 +36,9 @@ window.onbeforeunload = () => {
 	});
 }
 
-const filterMaxShareOfWords = 0.0075;  ///TODO change to stored setting
-const filterMinShareOfWords = 0.001;  ///TODO change to stored setting
-const wordsToSave = 5;  ///TODO change to stored setting
+const filterMaxShareOfWords = 0.0075;  /// TODO change to stored setting
+const filterMinShareOfWords = 0.001;  /// TODO change to stored setting
+const wordsToSave = 5;  /// TODO change to stored setting
 
 progressiveImmersion.analyzeWordTally = function(){
 	browser.storage.local.get("wordQueue").then((value) => {
