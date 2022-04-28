@@ -14,9 +14,10 @@
 		"polyfill"
 	],
 	"scripts": {
-		"pack": "npx webpack",
-		"start-dev": "web-ext run",
-		"build": "npx webpack && npx web-ext build"
+		"pack": "npx webpack --mode=development",
+		"serve-pack": "webpack serve --mode=development",
+		"serve-ext": "npx web-ext run",
+		"build": "npx webpack --mode=production && npx web-ext build"
 	},
 	"author": "Aidan Welch",
 	"license": "Apache-2.0",
@@ -27,6 +28,7 @@
 		"web-ext": "^6.8.0",
 		"webextension-polyfill": "^0.7.0",
 		"webpack": "^5.72.0",
-		"webpack-cli": "^4.9.2"
+		"webpack-cli": "^4.9.2",
+		"webpack-dev-server": "^4.8.1"
 	}
 }

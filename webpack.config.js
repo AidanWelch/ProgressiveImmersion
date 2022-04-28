@@ -24,6 +24,20 @@ module.exports = [
 					}
 				]
 			})
-		]
+		],
+		devServer: {
+			//open: false,
+			hot: false,
+			port: 8000,
+			allowedHosts: 'auto',
+			static: path.resolve(__dirname, 'build'),
+			watchFiles: 'src/**/*',
+			client: {
+				progress: true
+			},
+			devMiddleware: {
+				writeToDisk: true
+			}
+		}
 	},
 ]
