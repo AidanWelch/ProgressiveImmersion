@@ -31,11 +31,11 @@ module.exports = (env, argv) => [
 						context: path.resolve(__dirname, 'src'),
 						from:  'images/*.png',
 					}, {
-						from: path.resolve(__dirname, 'src', 'popup'),
-						to: path.resolve(__dirname, 'build', 'popup'),
+						context: path.resolve(__dirname, 'src'),
+						from: 'popup/*',
 					}, {
-						from: path.resolve(__dirname, 'src', 'content_scripts'),
-						to: path.resolve(__dirname, 'build', 'content_scripts'),
+						context: path.resolve(__dirname, 'src'),
+						from: 'content_scripts/*',
 					}
 				]
 			})
