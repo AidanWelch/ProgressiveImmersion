@@ -1,3 +1,12 @@
+import 'setimmediate'
+import translate from '@vitalets/google-translate-api'
+
+
+(async function () {
+	const res = await translate('Ik spreek Engels', {to: 'en'});
+	console.log(res.text);
+})();
+
 browser.storage.local.get(["state", "latestWordTime"]).then((value) => {
 	let state = value.state;
 	if(state === undefined){
