@@ -1,14 +1,25 @@
 const path = require("path");
 const CopyPlugin = require("copy-webpack-plugin");
+const NodePolyfillPlugin = require("node-polyfill-webpack-plugin");
 
-module.exports = [
+module.exports = (env, argv) => [
 	{
 		entry: path.resolve(__dirname, 'src', 'background_scripts', 'main.js'),
+		devtool: (argv.mode === 'development') ? 'inline-source-map' : false,
 		output: {
 			path: path.resolve(__dirname, 'build'),
-			filename: path.join('background_scripts', 'main.js')
+			filename: path.join('background_scripts', 'main.js'),
+			clean: true,
+		},
+		resolve: {
+			fallback: {
+				'net': false,
+				'tls': false,
+				'fs': false,
+			}
 		},
 		plugins: [
+			new NodePolyfillPlugin(),
 			new CopyPlugin({
 				patterns: [
 					path.resolve(__dirname, 'src', 'manifest.json'),
@@ -39,4 +50,4 @@ module.exports = [
 			}
 		}
 	},
-]
+];
