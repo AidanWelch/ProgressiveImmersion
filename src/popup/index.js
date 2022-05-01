@@ -40,7 +40,7 @@ browser.storage.local.get("updateFrequency").then((value) => {
 });
 
 document.getElementById("updateSlider").oninput = () => {
-	var updateFrequency = parseFloat(document.getElementById("updateSlider").value);
+	const updateFrequency = parseFloat(document.getElementById("updateSlider").value);
 	document.getElementById("updateSliderText").innerHTML = `New words every ${updateFrequency.toPrecision(3)} hours`;
 	browser.storage.local.set({updateFrequency: updateFrequency});
 };
