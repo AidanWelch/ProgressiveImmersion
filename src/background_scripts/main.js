@@ -1,5 +1,4 @@
 import browser from "webextension-polyfill";
-import "./analyze-handler"
 import updateDictionary from "./dictionary-handler";
 
 browser.storage.local.get(["state", "latestWordTime", "updateFrequency"]).then( value => {
