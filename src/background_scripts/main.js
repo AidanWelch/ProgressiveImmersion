@@ -6,6 +6,12 @@ browser.storage.local.get(["state", "latestWordTime", "updateFrequency"]).then( 
 		value.state = false;
 		browser.storage.local.set({ state: false });
 	}
+
+	if (value.latestWordTime === undefined) {
+		value.latestWordTime = Date.now();
+		browser.storage.local.set({ latestWordTime: value.latestWordTime });
+	}
+	
 	browser.browserAction.setBadgeBackgroundColor({color: "white"});
 	if(value.state){
 		browser.browserAction.setBadgeText({text: "On"});
@@ -14,11 +20,6 @@ browser.storage.local.get(["state", "latestWordTime", "updateFrequency"]).then( 
 	} else {
 		browser.browserAction.setBadgeText({text: "Off"});
 		browser.browserAction.setBadgeTextColor({color: "red"});
-	}
-
-	if (value.latestWordTime === undefined) {
-		value.latestWordTime = Date.now();
-		browser.storage.local.set({ latestWordTime: value.latestWordTime });
 	}
 
 	browser.storage.onChanged.addListener( (changes, areaName) => {
