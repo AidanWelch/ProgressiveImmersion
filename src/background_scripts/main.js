@@ -1,17 +1,25 @@
 import browser from "webextension-polyfill";
 import updateDictionary from "./dictionary-handler";
 
-browser.storage.local.get(["state", "latestWordTime", "updateFrequency"]).then( value => {
+browser.storage.local.get(["state", "latestWordTime", "updateFrequency", "origin", "originNativeName", "target", "targetNativeName"]).then( value => {
 	if(value.state === undefined){
 		value.state = false;
 		browser.storage.local.set({ state: false });
+	}
+
+	if (value.origin === undefined || value.originNativeName === undefined) {
+		browser.storage.local.set({ origin: "en", originNativeName: "English" });
+	}
+
+	if (value.target === undefined || value.targetNativeName === undefined) {
+		browser.storage.local.set({ target: "es", targetNativeName: "Español" })
 	}
 
 	if (value.latestWordTime === undefined) {
 		value.latestWordTime = Date.now();
 		browser.storage.local.set({ latestWordTime: value.latestWordTime });
 	}
-	
+
 	browser.browserAction.setBadgeBackgroundColor({color: "white"});
 	if(value.state){
 		browser.browserAction.setBadgeText({text: "On"});
@@ -46,7 +54,7 @@ function awaitNextWord (value) {
 
 function handleNextWord(){
 	browser.storage.local.get(["updateFrequency", "latestWordTime"]).then( value => {
-		// TODO update dictionary
+		updateDictionary();
 		browser.storage.local.set({ latestWordTime: Date.now() });
 		awaitNextWord(value)
 	})
