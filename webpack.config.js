@@ -5,6 +5,7 @@ const {
 	NodeProtocolUrlPlugin
 } = require('node-stdlib-browser/helpers/webpack/plugin');
 const webpack = require('webpack');
+const languages = JSON.stringify(require('@vitalets/google-translate-api/languages'));
 
 module.exports = (env, argv) => [
 	{
@@ -33,6 +34,9 @@ module.exports = (env, argv) => [
 					}, {
 						context: path.resolve(__dirname, 'src'),
 						from: 'popup/*',
+						transform (content, absoluteFrom) {
+							return injectVariables('LANGUAGES', languages, content);
+						}
 					}, {
 						context: path.resolve(__dirname, 'src'),
 						from: 'content_scripts/*',
@@ -55,3 +59,8 @@ module.exports = (env, argv) => [
 		}
 	},
 ];
+
+function injectVariables (indentifier, variable, buffer) {
+	const text = buffer.toString();
+	return text.replace(indentifier, variable);
+}

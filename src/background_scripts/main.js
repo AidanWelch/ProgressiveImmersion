@@ -12,7 +12,7 @@ browser.storage.local.get(["state", "latestWordTime", "updateFrequency", "origin
 	}
 
 	if (value.target === undefined || value.targetNativeName === undefined) {
-		browser.storage.local.set({ target: "es", targetNativeName: "Español" })
+		browser.storage.local.set({ target: "es", targetNativeName: "Spanish" })
 	}
 
 	if (value.latestWordTime === undefined) {
