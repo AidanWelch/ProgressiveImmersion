@@ -26,5 +26,10 @@
 	],
 	"background": {
 		"scripts": ["background_scripts/main.js"]
+	},
+	"options_ui": {
+		"page": "options/index.html",
+		"browser_style": true,
+		"chrome_style": true
 	}
 }
