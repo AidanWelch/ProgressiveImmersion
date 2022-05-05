@@ -40,6 +40,9 @@ module.exports = (env, argv) => [
 					}, {
 						context: path.resolve(__dirname, 'src'),
 						from: 'content_scripts/*',
+					}, {
+						context: path.resolve(__dirname, 'src'),
+						from: 'options/*',
 					}
 				]
 			})
