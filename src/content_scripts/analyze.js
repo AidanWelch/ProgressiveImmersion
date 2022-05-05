@@ -2,7 +2,17 @@ progressiveImmersion.trackElement = function (elem){
 	progressiveImmersion.viewObserver.observe(elem);
 }
 
-const minWordLength = 4;  /// TODO change to stored setting
+let minWordLength = 4;  /// TODO change to stored setting
+let filterMaxShareOfWords = 0.0075;  /// TODO change to stored setting
+let filterMinShareOfWords = 0.001;  /// TODO change to stored setting
+let wordsToSave = 5;  /// TODO change to stored setting
+
+browser.storage.local.get(["minWordLength", "filterMaxShareOfWords", "filterMinShareOfWords", "wordsToSave"]).then( value => {
+	minWordLength = value.minWordLength !== undefined ? value.minWordLength : minWordLength;
+	filterMaxShareOfWords = value.filterMaxShareOfWords !== undefined ? value.filterMaxShareOfWords : filterMaxShareOfWords;
+	filterMinShareOfWords = value.filterMinShareOfWords !== undefined ? value.filterMinShareOfWords : filterMinShareOfWords;
+	wordsToSave = value.wordsToSave !== undefined ? value.wordsToSave : wordsToSave;
+});
 
 progressiveImmersion.viewObserver = new IntersectionObserver((entries) =>{
 	entries.forEach(entry => {
@@ -35,10 +45,6 @@ window.onbeforeunload = (e) => {
 		}
 	});
 }
-
-const filterMaxShareOfWords = 0.0075;  /// TODO change to stored setting
-const filterMinShareOfWords = 0.001;  /// TODO change to stored setting
-const wordsToSave = 5;  /// TODO change to stored setting
 
 progressiveImmersion.analyzeWordTally = function(value){
 	if (value.wordQueue === undefined) {

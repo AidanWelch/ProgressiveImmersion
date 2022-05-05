@@ -48,7 +48,7 @@ browser.storage.local.get(["state", "latestWordTime", "updateFrequency", "origin
 let timeoutID;
 function awaitNextWord (value) {
 	clearTimeout(timeoutID)
-	const nextWordDelay = (value.latestWordTime - Date.now())  + ((value.updateFrequency ? value.updateFrequency : 12) * 60 * 60 * 1000);
+	const nextWordDelay = (value.latestWordTime - Date.now())  + ((value.updateFrequency !== undefined ? value.updateFrequency : 12) * 60 * 60 * 1000);
 	timeoutID = setTimeout(handleNextWord, nextWordDelay);
 }
 
