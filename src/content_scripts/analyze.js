@@ -18,7 +18,7 @@ progressiveImmersion.viewObserver = new IntersectionObserver((entries) =>{
 	entries.forEach(entry => {
 		if(entry.isIntersecting && !entry.target.analyzed){
 			entry.target.analyzed = true;
-			var words = entry.target.textContent.match(/[\p{L}-]+/ug);
+			var words = entry.target.innerText.match(/[\p{L}-]+/ug);
 			if(words){
 				for(var word of words){
 					if(word.length >= minWordLength){
