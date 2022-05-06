@@ -5,7 +5,15 @@ const {
 	NodeProtocolUrlPlugin
 } = require('node-stdlib-browser/helpers/webpack/plugin');
 const webpack = require('webpack');
-const languages = JSON.stringify(require('@vitalets/google-translate-api/languages'));
+const LANGUAGES = JSON.stringify(require('@vitalets/google-translate-api/languages'));
+
+const DEFAULTS = [
+	["DEFAULT_UPDATE_FREQUENCY", 12.0],
+	["DEFAULT_MIN_WORD_LENGTH", 4],
+	["DEFAULT_WORDS_TO_SAVE", 5],
+	["DEFAULT_FILTER_MAX_SHARE_OF_WORDS", 0.0075],
+	["DEFAULT_FILTER_MIN_SHARE_OF_WORDS", 0.001]
+];
 
 module.exports = (env, argv) => [
 	{
@@ -35,14 +43,21 @@ module.exports = (env, argv) => [
 						context: path.resolve(__dirname, 'src'),
 						from: 'popup/*',
 						transform (content, absoluteFrom) {
-							return injectVariables('LANGUAGES', languages, content);
+							const text = injectVariable('LANGUAGES', LANGUAGES, content.toString());
+							return injectDefaults(text);
 						}
 					}, {
 						context: path.resolve(__dirname, 'src'),
 						from: 'content_scripts/*',
+						transform (content, absoluteFrom) {
+							return injectDefaults(content.toString());
+						}
 					}, {
 						context: path.resolve(__dirname, 'src'),
 						from: 'options/*',
+						transform (content, absoluteFrom) {
+							return injectDefaults(content.toString());
+						}
 					}
 				]
 			})
@@ -63,7 +78,13 @@ module.exports = (env, argv) => [
 	},
 ];
 
-function injectVariables (indentifier, variable, buffer) {
-	const text = buffer.toString();
-	return text.replace(indentifier, variable);
+function injectVariable (indentifier, variable, text) {
+	return text.replaceAll(indentifier, variable);
+}
+
+function injectDefaults (text) {
+	for (let d of DEFAULTS) {
+		text = text.replaceAll(d[0], d[1]);
+	}
+	return text;
 }

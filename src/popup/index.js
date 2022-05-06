@@ -32,10 +32,10 @@ document.getElementById("onSwitch").addEventListener("click", () => {
 // Update Slider
 
 browser.storage.local.get("updateFrequency").then((value) => {
-	document.getElementById("updateSlider").value = (value.updateFrequency !== undefined) ? value.updateFrequency : 12.0;
+	document.getElementById("updateSlider").value = (value.updateFrequency !== undefined) ? value.updateFrequency : DEFAULT_UPDATE_FREQUENCY;
 	document.getElementById("updateSliderText").innerHTML = `New words every ${document.getElementById("updateSlider").value} hours`;
 	if (value.updateFrequency === undefined) {
-		browser.storage.local.set({updateFrequency: 12.0})
+		browser.storage.local.set({updateFrequency: DEFAULT_UPDATE_FREQUENCY})
 	}
 });
 

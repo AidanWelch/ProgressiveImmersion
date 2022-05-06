@@ -2,10 +2,10 @@ progressiveImmersion.trackElement = function (elem){
 	progressiveImmersion.viewObserver.observe(elem);
 }
 
-let minWordLength = 4;  /// TODO change to stored setting
-let filterMaxShareOfWords = 0.0075;  /// TODO change to stored setting
-let filterMinShareOfWords = 0.001;  /// TODO change to stored setting
-let wordsToSave = 5;  /// TODO change to stored setting
+let minWordLength = DEFAULT_MIN_WORD_LENGTH;
+let wordsToSave = DEFAULT_WORDS_TO_SAVE;
+let filterMaxShareOfWords = DEFAULT_FILTER_MAX_SHARE_OF_WORDS;
+let filterMinShareOfWords = DEFAULT_FILTER_MIN_SHARE_OF_WORDS;
 
 browser.storage.local.get(["minWordLength", "filterMaxShareOfWords", "filterMinShareOfWords", "wordsToSave"]).then( value => {
 	minWordLength = value.minWordLength !== undefined ? value.minWordLength : minWordLength;
