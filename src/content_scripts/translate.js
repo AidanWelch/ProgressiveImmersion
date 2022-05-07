@@ -7,8 +7,9 @@ progressiveImmersion.translate = function (elem, dictionary, origin, target) {
 	const dictionaryPage = dictionary[origin][target];
 
 	for (let word in dictionaryPage) {
-		const regex = new RegExp(`\\b${word}\\b`, "gu");
-		elem.textContent = elem.textContent.replaceAll(regex, dictionaryPage[word]);
+		const regex = new RegExp(`(?<!<[^<>]*)\\b${word}\\b(?![^<>]*>)`, "gu");
+		const injection = `<progressive-immersion-word data-original="${word}" data-translated="${dictionaryPage[word]}">${dictionaryPage[word]}</progressive-immersion-word>`
+		elem.innerHTML = elem.innerHTML.replaceAll(regex, injection);
 	}
 
 }
