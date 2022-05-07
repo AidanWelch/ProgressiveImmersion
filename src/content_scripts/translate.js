@@ -8,8 +8,18 @@ progressiveImmersion.translate = function (elem, dictionary, origin, target) {
 
 	for (let word in dictionaryPage) {
 		const regex = new RegExp(`(?<!<[^<>]*)\\b${word}\\b(?![^<>]*>)`, "gu");
-		const injection = `<progressive-immersion-word data-original="${word}" data-translated="${dictionaryPage[word]}">${dictionaryPage[word]}</progressive-immersion-word>`
+		const injection = `<progressive-immersion-word data_original="${word}" data_translated="${dictionaryPage[word]}">${dictionaryPage[word]}</progressive-immersion-word>`
 		elem.innerHTML = elem.innerHTML.replaceAll(regex, injection);
+	}
+
+	const wordElements = elem.getElementsByTagName("progressive-immersion-word");
+	for (let word of wordElements) { /// TODO Maybe make this a popup instead of a replace
+		word.addEventListener("mouseover", e => {
+			e.target.textContent = e.target.getAttribute("data_original");
+		});
+		word.addEventListener("mouseout", e => {
+			e.target.textContent = e.target.getAttribute("data_translated");
+		});
 	}
 
 }
