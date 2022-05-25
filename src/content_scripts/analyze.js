@@ -2,33 +2,17 @@ progressiveImmersion.trackElement = function (elem){
 	progressiveImmersion.viewObserver.observe(elem);
 }
 
-let minWordLength = DEFAULT_MIN_WORD_LENGTH;
 let wordsToSave = DEFAULT_WORDS_TO_SAVE;
 let filterMaxShareOfWords = DEFAULT_FILTER_MAX_SHARE_OF_WORDS;
 let filterMinShareOfWords = DEFAULT_FILTER_MIN_SHARE_OF_WORDS;
 
-browser.storage.local.get(["minWordLength", "filterMaxShareOfWords", "filterMinShareOfWords", "wordsToSave"]).then( value => {
-	minWordLength = value.minWordLength !== undefined ? value.minWordLength : minWordLength;
+browser.storage.local.get(["filterMaxShareOfWords", "filterMinShareOfWords", "wordsToSave"]).then( value => {
 	filterMaxShareOfWords = value.filterMaxShareOfWords !== undefined ? value.filterMaxShareOfWords : filterMaxShareOfWords;
 	filterMinShareOfWords = value.filterMinShareOfWords !== undefined ? value.filterMinShareOfWords : filterMinShareOfWords;
 	wordsToSave = value.wordsToSave !== undefined ? value.wordsToSave : wordsToSave;
 });
 
-progressiveImmersion.viewObserver = new IntersectionObserver((entries) =>{
-	entries.forEach(entry => {
-		if(entry.isIntersecting && !entry.target.analyzed){
-			entry.target.analyzed = true;
-			var words = entry.target.innerText.match(/[\p{L}-]+/ug);
-			if(words){
-				for(var word of words){
-					if(word.length >= minWordLength){
-						progressiveImmersion.countWord(word.toLowerCase());
-					}
-				}
-			}
-		}
-	})
-});
+
 
 progressiveImmersion.wordTally = new Map();
 progressiveImmersion.countWord = function (word){
