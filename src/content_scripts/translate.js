@@ -13,7 +13,7 @@ progressiveImmersion.translate = function (elem, dictionary, origin, target) {
 	}
 
 	const wordElements = elem.getElementsByTagName("progressive-immersion-word");
-	for (let word of wordElements) { /// TODO Maybe make this a popup instead of a replace
+	for (let word of wordElements) {
 		word.addEventListener("mouseover", e => {
 			e.target.textContent = e.target.getAttribute("data_original");
 		});
