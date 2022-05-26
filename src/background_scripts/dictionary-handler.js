@@ -21,6 +21,10 @@ function updateDictionary(){
 
 		const word = value.wordQueue.sort((a, b) => a[1] - b[1]).pop();
 
+		if (value.dictionary[value.origin][value.target][word] !== undefined) {
+			return;
+		}
+
 		translate(word[0], {from: value.origin, to: value.target}).then( res => {
 			value.dictionary[value.origin][value.target][word[0]] = res.text;
 			browser.storage.local.set({
