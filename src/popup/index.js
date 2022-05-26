@@ -69,7 +69,7 @@ browser.storage.local.get("exclusionListMode").then((value) => {
 
 browser.storage.local.get("exclusionList").then((value) => {
 	if (value.exclusionList){
-		document.getElementById("exclusionList").value = value.exclusionList;
+		document.getElementById("exclusionList").value = value.exclusionList.join("\n");
 	}
 });
 
@@ -83,5 +83,5 @@ document.getElementById("exclusionListMode").oninput = () => {
 
 document.getElementById("exclusionList").addEventListener("input", () => {
 	console.log(document.getElementById("exclusionList").value)
-	browser.storage.local.set({exclusionList: document.getElementById("exclusionList").value});
+	browser.storage.local.set({exclusionList: document.getElementById("exclusionList").value.trim().split("\n")});
 });
