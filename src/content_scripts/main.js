@@ -5,8 +5,22 @@ let origin = undefined;
 let target = undefined;
 let minWordLength = DEFAULT_MIN_WORD_LENGTH;
 
-browser.storage.local.get(["state", "dictionary", "origin", "target", "minWordLength"]).then( value => {
-	if(value.state){
+browser.storage.local.get(["state", "dictionary", "origin", "target", "minWordLength", "exclusionList", "exclusionListMode"]).then( value => {
+	
+	let isExcluded = false;
+
+	value.exclusionListMode = value.exclusionListMode === undefined ? "blacklist" : value.exclusionListMode;
+	
+	if (value.exclusionList !== undefined) {
+		isExcluded = value.exclusionList.some( exclusion => {
+			if (exclusion === "") {
+				return false;
+			}
+			return value.exclusionListMode === "blacklist" ? window.location.href.includes(exclusion) : !window.location.href.includes(exclusion);
+		});
+	}
+
+	if (value.state && !isExcluded){
 		dictionary = value.dictionary;
 		origin = value.origin;
 		target = value.target;
@@ -16,7 +30,7 @@ browser.storage.local.get(["state", "dictionary", "origin", "target", "minWordLe
 			const elems = document.body.getElementsByTagName(tag);
 			for(var i = 0; i < elems.length; i++){
 				if(elems.item(i).textContent){
-					progressiveImmersion.trackElement(elems.item(i));
+					progressiveImmersion.viewObserver.observe(elems.item(i));
 				}
 			}
 		});

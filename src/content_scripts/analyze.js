@@ -1,7 +1,3 @@
-progressiveImmersion.trackElement = function (elem){
-	progressiveImmersion.viewObserver.observe(elem);
-}
-
 let wordsToSave = DEFAULT_WORDS_TO_SAVE;
 let filterMaxShareOfWords = DEFAULT_FILTER_MAX_SHARE_OF_WORDS;
 let filterMinShareOfWords = DEFAULT_FILTER_MIN_SHARE_OF_WORDS;
