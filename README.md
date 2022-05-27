@@ -7,14 +7,14 @@ A browser extension that progressively immerses you in a language.
 Just two commands!
 
 ```
-npm install
+npm install -D
 npm run build
 ```
 
 And a development server can be run with just three!
 
 ```
-npm install
+npm install -D
 npm run serve-pack
 ```
 
@@ -22,6 +22,14 @@ and then in a seperate shell
 
 ```
 npm run serve-ext
+```
+
+And for reviewers:
+
+```
+OS: Windows 10 21H2
+Node: v16.15.0
+npm: 8.8.0
 ```
 
 ## Will not fix issues:
