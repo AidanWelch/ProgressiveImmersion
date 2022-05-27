@@ -1,19 +1,21 @@
 {
-	"manifest_version": 2,
+	"manifest_version": 3,
 	"name": "Progressive Immersion",
 	"description": "A browser extension that progressively immerses you in a language.",
 	"icons": {
 		"48": "images/logo-48.png",
 		"96": "images/logo-96.png"
 	},
-	"version": "0.6.1",
+	"version": "0.6.2",
 	"permissions": [
 		"storage",
-		"unlimitedStorage",
+		"unlimitedStorage"
+	],
+	"host_permissions": [
 		"https://ssl.gstatic.com/",
 		"https://translate.google.com/"
 	],
-	"browser_action": {
+	"action": {
 		"default_icon": "images/logo-32.png",
 		"default_title": "Progressive Immersion",
 		"default_popup": "popup/index.html"
@@ -25,7 +27,7 @@
 		}
 	],
 	"background": {
-		"scripts": ["background_scripts/main.js"]
+		"service_worker": "background_scripts/main.js"
 	},
 	"options_ui": {
 		"page": "options/index.html",
