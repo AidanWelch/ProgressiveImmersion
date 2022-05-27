@@ -1,3 +1,10 @@
+import {	
+	browser,
+	DEFAULT_WORDS_TO_SAVE,
+	DEFAULT_FILTER_MAX_SHARE_OF_WORDS,
+	DEFAULT_FILTER_MIN_SHARE_OF_WORDS
+} from "../config";
+
 let wordsToSave = DEFAULT_WORDS_TO_SAVE;
 let filterMaxShareOfWords = DEFAULT_FILTER_MAX_SHARE_OF_WORDS;
 let filterMinShareOfWords = DEFAULT_FILTER_MIN_SHARE_OF_WORDS;
@@ -10,23 +17,23 @@ browser.storage.local.get(["filterMaxShareOfWords", "filterMinShareOfWords", "wo
 
 
 
-progressiveImmersion.wordTally = new Map();
-progressiveImmersion.countWord = function (word){
-	if(!progressiveImmersion.wordTally.has(word)){
-		progressiveImmersion.wordTally.set(word, 0);
+const wordTally = new Map();
+function countWord (word) {
+	if(!wordTally.has(word)){
+		wordTally.set(word, 0);
 	}
-	progressiveImmersion.wordTally.set(word, progressiveImmersion.wordTally.get(word) + 1);
+	wordTally.set(word, wordTally.get(word) + 1);
 }
 
 window.onbeforeunload = (e) => {
 	browser.storage.local.get(["state", "wordQueue"]).then((value) => {
 		if(value.state){
-			progressiveImmersion.analyzeWordTally(value);
+			analyzeWordTally(value);
 		}
 	});
 }
 
-progressiveImmersion.analyzeWordTally = function(value){
+function analyzeWordTally (value){
 	if (value.wordQueue === undefined) {
 		value.wordQueue = [];
 	}
@@ -34,15 +41,15 @@ progressiveImmersion.analyzeWordTally = function(value){
 	const time = Date.now();
 
 	for (let i = 0; i < value.wordQueue.length; i++){
-		const instances = progressiveImmersion.wordTally.get(value.wordQueue[i][0]);
+		const instances = wordTally.get(value.wordQueue[i][0]);
 		if (instances !== undefined){
 			value.wordQueue[i][1] += instances;
 			value.wordQueue[i][2] = time;
-			progressiveImmersion.wordTally.delete(value.wordQueue[i][0]);
+			wordTally.delete(value.wordQueue[i][0]);
 		}
 	}
 
-	let tallyArray = [...progressiveImmersion.wordTally].sort((a, b) => b[1] - a[1]);
+	let tallyArray = [...wordTally].sort((a, b) => b[1] - a[1]);
 	let totalWords = 0;
 	for(var i = 0; i < tallyArray.length; ++i){
 		totalWords += tallyArray[i][1];
@@ -57,3 +64,5 @@ progressiveImmersion.analyzeWordTally = function(value){
 	}
 	browser.storage.local.set({ wordQueue: value.wordQueue });
 }
+
+export default countWord;

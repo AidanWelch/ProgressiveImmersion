@@ -1,6 +1,9 @@
-const dictionaryList = document.getElementById("dictionaryList");
+import {
+	browser,
+	LANGUAGES,
+} from "../config";
 
-const languages = LANGUAGES;
+const dictionaryList = document.getElementById("dictionaryList");
 
 browser.storage.local.get(["dictionary", "target", "origin"]).then( value => {
 	if (value.dictionary === undefined) {
@@ -20,8 +23,8 @@ browser.storage.local.get(["dictionary", "target", "origin"]).then( value => {
 			const listItem = document.createElement("li");
 			const button = document.createElement("a");
 			button.classList.add("w3-button");
-			button.textContent = languages[origin] + " -> " + languages[target];
-			button.href = "dictionary.html#" + origin + "~" + target + "~" + languages[origin] + "~" + languages[target];
+			button.textContent = LANGUAGES[origin] + " -> " + LANGUAGES[target];
+			button.href = "dictionary.html#" + origin + "~" + target + "~" + LANGUAGES[origin] + "~" + LANGUAGES[target];
 			listItem.appendChild(button);
 			dictionaryList.appendChild(listItem);
 		}

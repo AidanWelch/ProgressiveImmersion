@@ -1,4 +1,4 @@
-progressiveImmersion.translate = function (elem, dictionary, origin, target) {
+function translate (elem, dictionary, origin, target) {
 
 	if (origin === undefined || target === undefined || dictionary === undefined || dictionary[origin] === undefined || dictionary[origin][target] === undefined) {
 		return;
@@ -23,3 +23,5 @@ progressiveImmersion.translate = function (elem, dictionary, origin, target) {
 	}
 
 }
+
+export default translate;

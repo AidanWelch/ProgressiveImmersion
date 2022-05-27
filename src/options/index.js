@@ -1,3 +1,12 @@
+import {	
+	browser,
+	DEFAULT_UPDATE_FREQUENCY,
+	DEFAULT_MIN_WORD_LENGTH,
+	DEFAULT_WORDS_TO_SAVE,
+	DEFAULT_FILTER_MAX_SHARE_OF_WORDS,
+	DEFAULT_FILTER_MIN_SHARE_OF_WORDS
+} from "../config";
+
 // Precise Update Frequency Options
 browser.storage.local.get("updateFrequency").then((value) => {
 	document.getElementById("updateFrequency").value = (value.updateFrequency !== undefined) ? value.updateFrequency : DEFAULT_UPDATE_FREQUENCY;

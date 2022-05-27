@@ -1,4 +1,4 @@
-import browser from "webextension-polyfill";
+import { browser } from "../config";
 import updateDictionary from "./dictionary-handler";
 
 browser.storage.local.get(["state", "latestWordTime", "updateFrequency", "origin", "originNativeName", "target", "targetNativeName"]).then( value => {

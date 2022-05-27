@@ -1,4 +1,10 @@
-const progressiveImmersion = {};
+import {	
+	browser,
+	DEFAULT_MIN_WORD_LENGTH,
+} from "../config";
+
+import translate from "./translate";
+import countWord from "./analyze";
 
 let dictionary = undefined;
 let origin = undefined;
@@ -30,14 +36,14 @@ browser.storage.local.get(["state", "dictionary", "origin", "target", "minWordLe
 			const elems = document.body.getElementsByTagName(tag);
 			for(var i = 0; i < elems.length; i++){
 				if(elems.item(i).textContent){
-					progressiveImmersion.viewObserver.observe(elems.item(i));
+					viewObserver.observe(elems.item(i));
 				}
 			}
 		});
 	}
 });
 
-progressiveImmersion.viewObserver = new IntersectionObserver((entries) =>{
+const viewObserver = new IntersectionObserver((entries) =>{
 	entries.forEach(entry => {
 		if(entry.isIntersecting && !entry.target.analyzed){
 			entry.target.analyzed = true;
@@ -45,11 +51,11 @@ progressiveImmersion.viewObserver = new IntersectionObserver((entries) =>{
 			if(words){
 				for(var word of words){
 					if(word.length >= minWordLength){
-						progressiveImmersion.countWord(word.toLowerCase());
+						countWord(word.toLowerCase());
 					}
 				}
 			}
-			progressiveImmersion.translate(entry.target, dictionary, origin, target);
+			translate(entry.target, dictionary, origin, target);
 		}
 	})
 });

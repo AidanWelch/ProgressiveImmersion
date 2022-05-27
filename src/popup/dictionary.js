@@ -1,3 +1,5 @@
+import { browser } from "../config";
+
 const dictionary = document.getElementById("dictionary");
 const [originIso, targetIso, originName, targetName] = window.location.hash.slice(1).split("~");
 

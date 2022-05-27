@@ -1,3 +1,8 @@
+import {	
+	browser,
+	DEFAULT_UPDATE_FREQUENCY,
+} from "../config";
+
 // ON/OFF
 
 browser.browserAction.setBadgeBackgroundColor({color: "white"});

@@ -1,4 +1,4 @@
-import browser from "webextension-polyfill";
+import { browser } from "../config";
 import 'setimmediate'
 import translate from '@vitalets/google-translate-api'
 
