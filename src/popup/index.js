@@ -5,7 +5,6 @@ import {
 
 // ON/OFF
 
-browser.browserAction.setBadgeBackgroundColor({color: "white"});
 let state;
 browser.storage.local.get("state").then((value) => {
 	state = value.state;
@@ -20,10 +19,10 @@ browser.storage.local.get("state").then((value) => {
 function updateBadgeState(){
 	if(state){
 		browser.browserAction.setBadgeText({text: "On"});
-		browser.browserAction.setBadgeTextColor({color: "green"});
+		browser.browserAction.setBadgeBackgroundColor({color: "green"});
 	} else {
 		browser.browserAction.setBadgeText({text: "Off"});
-		browser.browserAction.setBadgeTextColor({color: "red"});
+		browser.browserAction.setBadgeBackgroundColor({color: "red"});
 	}
 }
 

@@ -20,14 +20,13 @@ browser.storage.local.get(["state", "latestWordTime", "updateFrequency", "origin
 		browser.storage.local.set({ latestWordTime: value.latestWordTime });
 	}
 
-	browser.browserAction.setBadgeBackgroundColor({color: "white"});
 	if(value.state){
 		browser.browserAction.setBadgeText({text: "On"});
-		browser.browserAction.setBadgeTextColor({color: "green"});
+		browser.browserAction.setBadgeBackgroundColor({color: "green"});
 		awaitNextWord(value);
 	} else {
 		browser.browserAction.setBadgeText({text: "Off"});
-		browser.browserAction.setBadgeTextColor({color: "red"});
+		browser.browserAction.setBadgeBackgroundColor({color: "red"});
 	}
 
 	browser.storage.onChanged.addListener( (changes, areaName) => {
