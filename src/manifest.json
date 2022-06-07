@@ -6,12 +6,12 @@
 		"48": "images/logo-48.png",
 		"96": "images/logo-96.png"
 	},
-	"version": "0.6.1",
+	"version": "0.6.2",
 	"permissions": [
 		"storage",
 		"unlimitedStorage",
-		"https://ssl.gstatic.com/",
-		"https://translate.google.com/"
+		"https://ssl.gstatic.com/*",
+		"https://translate.google.com/*"
 	],
 	"browser_action": {
 		"default_icon": "images/logo-32.png",

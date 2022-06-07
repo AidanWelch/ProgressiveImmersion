@@ -23,10 +23,8 @@
 	"license": "Apache-2.0",
 	"homepage": "https://github.com/AidanWelch/ProgressiveImmersion",
 	"devDependencies": {
-		"@vitalets/google-translate-api": "^8.0.0",
 		"copy-webpack-plugin": "^10.2.4",
-		"node-stdlib-browser": "^1.2.0",
-		"setimmediate": "^1.0.5",
+		"google-translate-api-axios": "^9.0.1",
 		"web-ext": "^6.8.0",
 		"webextension-polyfill": "^0.7.0",
 		"webpack": "^5.72.0",

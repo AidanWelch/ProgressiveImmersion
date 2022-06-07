@@ -1,6 +1,5 @@
 import { browser } from "../config";
-import 'setimmediate'
-import translate from '@vitalets/google-translate-api'
+import translate from 'google-translate-api-axios'
 
 function updateDictionary(){
 	browser.storage.local.get([ "wordpack", "wordpackIndex", "wordQueue", "origin", "target", "dictionary"]).then( value => {
