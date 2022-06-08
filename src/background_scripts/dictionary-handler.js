@@ -28,10 +28,10 @@ function updateDictionary(){
 			}
 		}
 
-		browser.cookies.getAll({domain: "google.com"}).then( cookies => {
+		browser.cookies.getAll({domain: ".google.com"}).then( cookies => {
 			const promises = [];
 			for (let cookie of cookies) {
-				promises.push(browser.cookies.remove({url: "https://" + cookie.domain + cookie.path, name: cookie.name}).then( (res) => {return (res) ? cookie : false} ));
+				promises.push(browser.cookies.remove({url: "https://" + cookie.domain + cookie.path, name: cookie.name}).then( res => {return (res !== null) ? cookie : false} ));
 			}
 			return Promise.all(promises);
 		}).then( (cookies) => {
@@ -45,16 +45,14 @@ function updateDictionary(){
 				for (let cookie of cookies) {
 					if (cookie) {
 						const new_cookie = {
-							domain: cookie.domain,
+							//domain: cookie.domain,
 							expirationDate: cookie.expirationDate,
-							firstPartyDomain: cookie.firstPartyDomain,
 							httpOnly: cookie.httpOnly,
 							name: cookie.name,
-							partitionKey: cookie.partitionKey,
 							path: cookie.path,
 							sameSite: cookie.sameSite,
 							secure: cookie.secure,
-							storeId: cookie.storeId,
+							//storeId: cookie.storeId,
 							url: "https://" + cookie.domain + cookie.path,
 							value: cookie.value
 						}
