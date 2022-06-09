@@ -8,7 +8,7 @@
 	},
 	"version": "0.7.4",
 	"permissions": [
-    "cookies",
+    	"cookies",
 		"storage",
 		"unlimitedStorage"
 	],
