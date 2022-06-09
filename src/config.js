@@ -1,5 +1,5 @@
 import browser from "webextension-polyfill";
-const LANGUAGES = require("@vitalets/google-translate-api/languages");
+const LANGUAGES = require("google-translate-api-axios/languages");
 const DEFAULT_UPDATE_FREQUENCY = 12;
 const DEFAULT_MIN_WORD_LENGTH = 4;
 const DEFAULT_WORDS_TO_SAVE = 5;

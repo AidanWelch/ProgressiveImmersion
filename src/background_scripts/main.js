@@ -48,7 +48,7 @@ let timeoutID;
 function awaitNextWord (value) {
 	clearTimeout(timeoutID)
 	const nextWordDelay = (value.latestWordTime - Date.now())  + ((value.updateFrequency !== undefined ? value.updateFrequency : 12) * 60 * 60 * 1000);
-	timeoutID = setTimeout(handleNextWord, nextWordDelay);
+	timeoutID = setTimeout(handleNextWord, nextWordDelay > 0 ? nextWordDelay : 0);
 }
 
 function handleNextWord(){

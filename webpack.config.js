@@ -1,10 +1,5 @@
 const path = require("path");
 const CopyPlugin = require("copy-webpack-plugin");
-const stdLibBrowser = require('node-stdlib-browser');
-const {
-	NodeProtocolUrlPlugin
-} = require('node-stdlib-browser/helpers/webpack/plugin');
-const webpack = require('webpack');
 
 module.exports = (env, argv) => [
 	{
@@ -22,15 +17,7 @@ module.exports = (env, argv) => [
 			path: path.resolve(__dirname, 'build'),
 			clean: true,
 		},
-		resolve: {
-			alias: stdLibBrowser
-		},
 		plugins: [
-			new NodeProtocolUrlPlugin(),
-			new webpack.ProvidePlugin({
-				process: stdLibBrowser.process,
-				Buffer: [stdLibBrowser.buffer, 'Buffer']
-			}),
 			new CopyPlugin({
 				patterns: [
 					path.resolve(__dirname, 'src', 'manifest.json'),
