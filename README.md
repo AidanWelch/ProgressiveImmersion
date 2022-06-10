@@ -2,6 +2,10 @@
 # ProgressiveImmersion
 A browser extension that progressively immerses you in a language.
 
+## Download
+
+## [Firefox](https://addons.mozilla.org/en-US/firefox/addon/progressive-immersion/)
+
 ## Build
 
 Just two commands!
