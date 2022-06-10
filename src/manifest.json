@@ -6,7 +6,7 @@
 		"48": "images/logo-48.png",
 		"96": "images/logo-96.png"
 	},
-	"version": "0.7.4",
+	"version": "3.7.3",
 	"permissions": [
     	"cookies",
 		"storage",
