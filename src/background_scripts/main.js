@@ -28,33 +28,32 @@ browser.storage.local.get(["state", "latestWordTime", "updateFrequency", "origin
 		browser.browserAction.setBadgeText({text: "Off"});
 		browser.browserAction.setBadgeBackgroundColor({color: "red"});
 	}
-
-	browser.storage.onChanged.addListener( (changes, areaName) => {
-		if (areaName === "local") {
-			if (changes.updateFrequency || (changes.state && changes.state.newValue === true)) {
-				browser.storage.local.get(["state", "latestWordTime", "updateFrequency"]).then( value => {
-					if (value.state === true) {
-						awaitNextWord(value);
-					}
-				});
-			} else if (changes.state && changes.state.newValue === false) {
-				clearTimeout(timeoutID);
-			}
-		}
-	});
 });
 
-let timeoutID;
+browser.storage.onChanged.addListener( (changes, areaName) => {
+	if (areaName === "local") {
+		if (changes.updateFrequency || (changes.state && changes.state.newValue === true)) {
+			browser.storage.local.get(["state", "latestWordTime", "updateFrequency"]).then( value => {
+				if (value.state === true) {
+					awaitNextWord(value);
+				}
+			});
+		} else if (changes.state && changes.state.newValue === false) {
+			browser.alarms.clearAll();
+		}
+	}
+});
+
 function awaitNextWord (value) {
-	clearTimeout(timeoutID)
+	browser.alarms.clearAll();
 	const nextWordDelay = (value.latestWordTime - Date.now())  + ((value.updateFrequency !== undefined ? value.updateFrequency : 12) * 60 * 60 * 1000);
-	timeoutID = setTimeout(handleNextWord, nextWordDelay > 0 ? nextWordDelay : 0);
+	browser.alarms.create({ when: nextWordDelay });
 }
 
-function handleNextWord(){
+browser.alarms.onAlarm.addListener(() => {
 	browser.storage.local.get(["updateFrequency", "latestWordTime"]).then( value => {
 		updateDictionary();
 		browser.storage.local.set({ latestWordTime: Date.now() });
 		awaitNextWord(value)
 	})
-}
+});

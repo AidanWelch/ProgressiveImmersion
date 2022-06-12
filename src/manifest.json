@@ -8,6 +8,7 @@
 	},
 	"version": "0.7.4",
 	"permissions": [
+		"alarms",
     	"cookies",
 		"storage",
 		"unlimitedStorage"
@@ -28,11 +29,11 @@
 		}
 	],
 	"background": {
-		"service_worker": "background_scripts/main.js"
+		"service_worker": "background_scripts/main.js",
+		"mode": "module"
 	},
 	"options_ui": {
 		"page": "options/index.html",
-		"browser_style": true,
-		"chrome_style": true
+		"browser_style": true
 	}
 }
