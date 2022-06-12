@@ -21,12 +21,12 @@ browser.storage.local.get(["state", "latestWordTime", "updateFrequency", "origin
 	}
 
 	if(value.state){
-		browser.browserAction.setBadgeText({text: "On"});
-		browser.browserAction.setBadgeBackgroundColor({color: "green"});
+		browser.action.setBadgeText({text: "On"});
+		browser.action.setBadgeBackgroundColor({color: "green"});
 		awaitNextWord(value);
 	} else {
-		browser.browserAction.setBadgeText({text: "Off"});
-		browser.browserAction.setBadgeBackgroundColor({color: "red"});
+		browser.action.setBadgeText({text: "Off"});
+		browser.action.setBadgeBackgroundColor({color: "red"});
 	}
 });
 
