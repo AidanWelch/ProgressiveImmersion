@@ -15,7 +15,8 @@
 	],
 	"host_permissions": [
 		"https://ssl.gstatic.com/*",
-		"*://*.google.com/*"
+		"*://.google.com/*",
+		"*://translate.google.com/*"
 	],
 	"action": {
 		"default_icon": "images/logo-32.png",

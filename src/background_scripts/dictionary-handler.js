@@ -1,5 +1,5 @@
 import { browser } from "../config";
-import translate from 'google-translate-api-axios'
+import translate from 'google-translate-api-x'
 
 function updateDictionary(){
 	browser.storage.local.get([ "wordpack", "wordpackIndex", "wordQueue", "origin", "target", "dictionary"]).then( value => {
@@ -31,49 +31,47 @@ function updateDictionary(){
 		let attempts = 0;
 
 		function doTranslation() {
-			try {
-				browser.cookies.getAll({domain: ".google.com"}).then( cookies => {
-					const promises = [];
-					for (let cookie of cookies) {
-						promises.push(browser.cookies.remove({url: "https://" + cookie.domain + cookie.path, name: cookie.name}).then( res => {return (res !== null) ? cookie : false} ));
-					}
-					return Promise.all(promises);
-				}).then( (cookies) => {
-					return translate(word[0], {from: value.origin, to: value.target}).then( res => {
-						value.dictionary[value.origin][value.target][word[0]] = res.text;
-						browser.storage.local.set({
-							dictionary: value.dictionary,
-							wordQueue: value.wordQueue
-						});
-					}).then( () => {
-						for (let cookie of cookies) {
-							if (cookie) {
-								const new_cookie = {
-									//domain: cookie.domain,
-									expirationDate: cookie.expirationDate,
-									httpOnly: cookie.httpOnly,
-									name: cookie.name,
-									path: cookie.path,
-									sameSite: cookie.sameSite,
-									secure: cookie.secure,
-									//storeId: cookie.storeId,
-									url: "https://" + cookie.domain + cookie.path,
-									value: cookie.value
-								}
-								browser.cookies.set(new_cookie);
-							}
-						}
+			attempts++;
+			browser.cookies.getAll({domain: ".google.com"}).then( cookies => {
+				const promises = [];
+				for (let cookie of cookies) {
+					promises.push(browser.cookies.remove({url: "https://" + cookie.domain + cookie.path, name: cookie.name}).then( res => {return (res !== null) ? cookie : false} ));
+				}
+				return Promise.all(promises);
+			}).then( (cookies) => {
+				return translate(word[0], {from: value.origin, to: value.target}).then( res => {
+					value.dictionary[value.origin][value.target][word[0]] = res.text;
+					browser.storage.local.set({
+						dictionary: value.dictionary,
+						wordQueue: value.wordQueue
 					});
+				}).then( () => {
+					for (let cookie of cookies) {
+						if (cookie) {
+							const new_cookie = {
+								//domain: cookie.domain,
+								expirationDate: cookie.expirationDate,
+								httpOnly: cookie.httpOnly,
+								name: cookie.name,
+								path: cookie.path,
+								sameSite: cookie.sameSite,
+								secure: cookie.secure,
+								//storeId: cookie.storeId,
+								url: "https://" + cookie.domain + cookie.path,
+								value: cookie.value
+							}
+							browser.cookies.set(new_cookie);
+						}
+					}
 				});
-			} catch (err) {
+			}).catch((err) => {
 				if (attempts === 2) {
 					console.error(err);
 				} else {
 					console.warn(err);
-					attempts++;
 					doTranslation();
 				}
-			}
+			});
 		}
 
 		doTranslation();
