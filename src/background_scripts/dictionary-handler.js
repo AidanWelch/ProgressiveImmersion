@@ -1,5 +1,5 @@
 import { browser } from "../config";
-import translate from 'google-translate-api-axios'
+import translate from 'google-translate-api-x'
 
 function updateDictionary(){
 	browser.storage.local.get([ "wordpack", "wordpackIndex", "wordQueue", "origin", "target", "dictionary"]).then( value => {
