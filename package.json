@@ -16,7 +16,7 @@
 	"scripts": {
 		"pack": "npx webpack --mode=development",
 		"serve-pack": "webpack serve --mode=development",
-		"serve-ext": "npx web-ext run",
+		"serve-ext": "npx web-ext run --browser-console -t chromium --chromium-binary=\"C:\\Program Files\\Chromium\\Application\\chrome.exe\"",
 		"build": "npx webpack --mode=production && npx web-ext build"
 	},
 	"author": "Aidan Welch",
