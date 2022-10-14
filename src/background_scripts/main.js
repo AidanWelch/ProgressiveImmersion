@@ -32,28 +32,27 @@ browser.storage.local.get(["state", "latestWordTime", "updateFrequency", "origin
 
 browser.storage.onChanged.addListener( (changes, areaName) => {
 	if (areaName === "local") {
-		if (changes.updateFrequency || (changes.state && changes.state.newValue === true)) {
+		if (changes.updateFrequency || changes.state) {
 			browser.storage.local.get(["state", "latestWordTime", "updateFrequency"]).then( value => {
+				browser.alarms.clearAll();
 				if (value.state === true) {
 					awaitNextWord(value);
 				}
 			});
-		} else if (changes.state && changes.state.newValue === false) {
-			browser.alarms.clearAll();
 		}
 	}
 });
 
 function awaitNextWord (value) {
-	browser.alarms.clearAll();
-	const nextWordDelay = (value.latestWordTime - Date.now())  + ((value.updateFrequency !== undefined ? value.updateFrequency : 12) * 60 * 60 * 1000);
-	browser.alarms.create({ when: nextWordDelay });
+	const nextWordTime = value.latestWordTime + ((value.updateFrequency !== undefined ? value.updateFrequency : 12) * 60 * 60 * 1000);
+	browser.alarms.create({ when: nextWordTime });
 }
 
 browser.alarms.onAlarm.addListener(() => {
-	browser.storage.local.get(["updateFrequency", "latestWordTime"]).then( value => {
+	browser.storage.local.get(["updateFrequency"]).then( value => {
+		value.latestWordTime = Date.now();
 		updateDictionary();
-		browser.storage.local.set({ latestWordTime: Date.now() });
+		browser.storage.local.set({ latestWordTime: value.latestWordTime });
 		awaitNextWord(value)
 	})
 });
