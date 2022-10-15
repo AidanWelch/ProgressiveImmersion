@@ -35,25 +35,24 @@ browser.storage.local.get("dictionary").then( value => {
 	});
 
 	function drawTranslation (original, translated) {
-		const row = document.createElement("li");
-		row.classList.add("w3-row");
+		const row = dictionary.insertRow(dictionary.rows.length - 1);
 	
-		const text = document.createElement("p");
-		text.classList.add("w3-col", "s9", "w3-center");
-		text.textContent = original + " -> " + translated;
-		row.appendChild(text);
+		const [originalElem, targetElem] = [document.createElement("td"), document.createElement("td")];
+		[originalElem.textContent, targetElem.textContent] = [original, translated];
+		row.appendChild(originalElem);
+		row.appendChild(targetElem);
 	
+		const deleteButtonHeader = document.createElement("th");
 		const deleteButton = document.createElement("button");
 		deleteButton.textContent = "Delete";
-		deleteButton.classList.add("w3-button", "s3", "w3-center", "w3-col", "w3-red");
+		deleteButton.classList.add("w3-button", "w3-red");
 		deleteButton.addEventListener("click", e => {
 			delete value.dictionary[originIso][targetIso][original];
 			browser.storage.local.set({dictionary: value.dictionary});
 			row.remove();
 		});
-		row.appendChild(deleteButton);
-	
-		dictionary.appendChild(row)
+		deleteButtonHeader.appendChild(deleteButton)
+		row.appendChild(deleteButtonHeader);
 	}
 
 	if (Object.keys(value.dictionary[originIso][targetIso]).length === 0) {
