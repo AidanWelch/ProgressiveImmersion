@@ -6,11 +6,7 @@
 		"48": "images/logo-48.png",
 		"96": "images/logo-96.png"
 	},
-<<<<<<< HEAD:src/manifest-v2.json
 	"version": "0.8.2",
-=======
-	"version": "0.7.4",
->>>>>>> main:src/manifest.json
 	"permissions": [
 		"alarms",
 		"cookies",
