@@ -21,40 +21,38 @@ browser.storage.local.get(["state", "latestWordTime", "updateFrequency", "origin
 	}
 
 	if(value.state){
-		browser.browserAction.setBadgeText({text: "On"});
-		browser.browserAction.setBadgeBackgroundColor({color: "green"});
+		browser.action.setBadgeText({text: "On"});
+		browser.action.setBadgeBackgroundColor({color: "green"});
 		awaitNextWord(value);
 	} else {
-		browser.browserAction.setBadgeText({text: "Off"});
-		browser.browserAction.setBadgeBackgroundColor({color: "red"});
+		browser.action.setBadgeText({text: "Off"});
+		browser.action.setBadgeBackgroundColor({color: "red"});
 	}
-
-	browser.storage.onChanged.addListener( (changes, areaName) => {
-		if (areaName === "local") {
-			if (changes.updateFrequency || (changes.state && changes.state.newValue === true)) {
-				browser.storage.local.get(["state", "latestWordTime", "updateFrequency"]).then( value => {
-					if (value.state === true) {
-						awaitNextWord(value);
-					}
-				});
-			} else if (changes.state && changes.state.newValue === false) {
-				clearTimeout(timeoutID);
-			}
-		}
-	});
 });
 
-let timeoutID;
+browser.storage.onChanged.addListener( (changes, areaName) => {
+	if (areaName === "local") {
+		if (changes.updateFrequency || changes.state) {
+			browser.storage.local.get(["state", "latestWordTime", "updateFrequency"]).then( value => {
+				browser.alarms.clearAll();
+				if (value.state === true) {
+					awaitNextWord(value);
+				}
+			});
+		}
+	}
+});
+
 function awaitNextWord (value) {
-	clearTimeout(timeoutID)
-	const nextWordDelay = (value.latestWordTime - Date.now())  + ((value.updateFrequency !== undefined ? value.updateFrequency : 12) * 60 * 60 * 1000);
-	timeoutID = setTimeout(handleNextWord, nextWordDelay > 0 ? nextWordDelay : 0);
+	const nextWordTime = value.latestWordTime + ((value.updateFrequency !== undefined ? value.updateFrequency : 12) * 60 * 60 * 1000);
+	browser.alarms.create({ when: nextWordTime });
 }
 
-function handleNextWord(){
-	browser.storage.local.get(["updateFrequency", "latestWordTime"]).then( value => {
+browser.alarms.onAlarm.addListener(() => {
+	browser.storage.local.get(["updateFrequency"]).then( value => {
+		value.latestWordTime = Date.now();
 		updateDictionary();
-		browser.storage.local.set({ latestWordTime: Date.now() });
+		browser.storage.local.set({ latestWordTime: value.latestWordTime });
 		awaitNextWord(value)
 	})
-}
+});

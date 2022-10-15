@@ -9,6 +9,9 @@ document.getElementById("title").innerHTML =
 const languageList = document.getElementById("languageList");
 
 for (let isoCode in LANGUAGES) {
+	if (typeof LANGUAGES[isoCode] === "function") {
+		continue;
+	}
 	if (window.location.hash.slice(1) === "target" && isoCode === "auto") {
 		continue;
 	}

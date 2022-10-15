@@ -6,13 +6,19 @@
 		"48": "images/logo-48.png",
 		"96": "images/logo-96.png"
 	},
+<<<<<<< HEAD:src/manifest-v2.json
+	"version": "0.8.2",
+=======
 	"version": "0.7.4",
+>>>>>>> main:src/manifest.json
 	"permissions": [
+		"alarms",
+		"cookies",
 		"storage",
 		"unlimitedStorage",
-		"cookies",
 		"https://ssl.gstatic.com/*",
-		"*://*.google.com/*"
+		"*://.google.com/*",
+		"*://translate.google.com/*"
 	],
 	"browser_action": {
 		"default_icon": "images/logo-32.png",
@@ -30,7 +36,6 @@
 	},
 	"options_ui": {
 		"page": "options/index.html",
-		"browser_style": true,
-		"chrome_style": true
+		"browser_style": true
 	}
 }

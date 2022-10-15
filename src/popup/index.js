@@ -18,11 +18,11 @@ browser.storage.local.get("state").then((value) => {
 
 function updateBadgeState(){
 	if(state){
-		browser.browserAction.setBadgeText({text: "On"});
-		browser.browserAction.setBadgeBackgroundColor({color: "green"});
+		browser.action.setBadgeText({text: "On"});
+		browser.action.setBadgeBackgroundColor({color: "green"});
 	} else {
-		browser.browserAction.setBadgeText({text: "Off"});
-		browser.browserAction.setBadgeBackgroundColor({color: "red"});
+		browser.action.setBadgeText({text: "Off"});
+		browser.action.setBadgeBackgroundColor({color: "red"});
 	}
 }
 
