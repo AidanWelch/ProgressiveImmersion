@@ -14,10 +14,14 @@
 		"polyfill"
 	],
 	"scripts": {
-		"pack": "npx webpack --mode=development",
-		"serve-pack": "webpack serve --mode=development",
-		"serve-ext": "npx web-ext run --browser-console -t chromium --chromium-binary=\"C:\\Program Files\\Chromium\\Application\\chrome.exe\"",
-		"build": "npx webpack --mode=production && npx web-ext build"
+		"pack-v3": "webpack --mode=development --env manifest=v3",
+		"serve-pack-v3": "webpack serve --mode=development --env manifest=v3",
+		"serve-ext-v3": "web-ext run --browser-console -t chromium --chromium-binary=\"C:\\Program Files\\Chromium\\Application\\chrome.exe\"",
+		"build-v3": "npx webpack --mode=production --env manifest=v3 && npx web-ext build",
+		"pack-v2": "webpack --mode=development --env manifest=v2",
+		"serve-pack-v2": "webpack serve --mode=development --env manifest=v2",
+		"serve-ext-v2": "web-ext run --devtools",
+		"build-v2": "npx webpack --mode=production --env manifest=v2 && npx web-ext build"
 	},
 	"author": "Aidan Welch",
 	"license": "Apache-2.0",
@@ -25,7 +29,7 @@
 	"devDependencies": {
 		"copy-webpack-plugin": "^11.0.0",
 		"google-translate-api-x": "^10.4.2",
-		"web-ext": "^7.2.0",
+		"web-ext": "^7.3.0",
 		"webextension-polyfill": "^0.10.0",
 		"webpack": "^5.74.0",
 		"webpack-cli": "^4.10.0",

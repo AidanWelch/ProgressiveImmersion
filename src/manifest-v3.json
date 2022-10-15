@@ -6,10 +6,10 @@
 		"48": "images/logo-48.png",
 		"96": "images/logo-96.png"
 	},
-	"version": "0.8.0",
+	"version": "0.8.3",
 	"permissions": [
 		"alarms",
-    	"cookies",
+		"cookies",
 		"storage",
 		"unlimitedStorage"
 	],

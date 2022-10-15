@@ -20,7 +20,10 @@ module.exports = (env, argv) => [
 		plugins: [
 			new CopyPlugin({
 				patterns: [
-					path.resolve(__dirname, 'src', 'manifest.json'),
+					{
+						from: (env.manifest === 'v3') ? path.resolve(__dirname, 'src', 'manifest-v3.json') : path.resolve(__dirname, 'src', 'manifest-v2.json'),
+						to: 'manifest.json'
+					},
 					{
 						context: path.resolve(__dirname, 'src'),
 						from:  'images/*.png',
