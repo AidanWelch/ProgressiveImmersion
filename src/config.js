@@ -1,4 +1,7 @@
 import browser from "webextension-polyfill";
+if (!browser.action) {
+	browser.action = browser.browserAction;
+}
 const LANGUAGES = require("google-translate-api-x/languages");
 const DEFAULT_UPDATE_FREQUENCY = 12;
 const DEFAULT_MIN_WORD_LENGTH = 4;
