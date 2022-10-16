@@ -8,6 +8,7 @@
 	},
 	"version": "0.8.3",
 	"permissions": [
+		"webRequest",
 		"alarms",
 		"cookies",
 		"storage",
@@ -15,8 +16,9 @@
 	],
 	"host_permissions": [
 		"https://ssl.gstatic.com/*",
-		"*://.google.com/*",
-		"*://translate.google.com/*"
+		"*://*.google.com/*",
+		"https://translate.google.com/*",
+		"*://.google.com/*"
 	],
 	"action": {
 		"default_icon": "images/logo-32.png",
