@@ -2,7 +2,21 @@
 # ProgressiveImmersion
 A browser extension that progressively immerses you in a language.
 
-## Download
+## Features:
+
+- Fully Open-Source
+- Automatic translation for any language supported by Google Translate
+- Add words manually as you learn them to practice
+- Customize how frequently you're introduced to new words
+- Blacklist or whitelist websites
+
+## Coming soon:
+
+- Export and import dictionaries
+- Import custom wordpacks for a more guided learning experience
+- Have multiple active target languages at a time
+
+# Download
 
 ## [Firefox](https://addons.mozilla.org/en-US/firefox/addon/progressive-immersion/)
 
@@ -10,30 +24,37 @@ A browser extension that progressively immerses you in a language.
 
 Just two commands!
 
+For Firefox:
 ```
 npm install -D
-npm run build
+npm run build-v2
+```
+
+For Chromium:
+```
+npm install -D
+npm run build-v3
 ```
 
 And a development server can be run with just three!
 
 ```
 npm install -D
-npm run serve-pack
+npm run serve-pack-v[2 or 3]
 ```
 
 and then in a seperate shell
 
 ```
-npm run serve-ext
+npm run serve-ext-v[2 or 3]
 ```
 
 And for reviewers:
 
 ```
-OS: Windows 10 21H2
-Node: v16.15.0
-npm: 8.8.0
+OS: Windows 11 22H2
+Node: v18.3.0
+npm: 8.11.0
 ```
 
 ## Will not fix issues:
