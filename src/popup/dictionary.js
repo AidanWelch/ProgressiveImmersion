@@ -56,11 +56,8 @@ browser.storage.local.get("dictionary").then( value => {
 	}
 
 	if (Object.keys(value.dictionary[originIso][targetIso]).length === 0) {
-		const listItem = document.createElement("li");
-		const text = document.createElement("p");
-		text.textContent = "Your dictionary is currently empty, try using the extension more.  Or, you can add a word manually below.";
-		listItem.appendChild(text);
-		dictionary.appendChild(listItem);
-		return;
+		const caption = dictionary.createCaption();
+		caption.classList.add('w3-blue', 'w3-card');
+		caption.textContent = "Your dictionary is currently empty, try using the extension more.  Or, you can add words manually below.";
 	}
 });
