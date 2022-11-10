@@ -6,11 +6,14 @@ function translate (elem, dictionary, origin, target) {
 
 	const dictionaryPage = dictionary[origin][target];
 	
-	for (let word in dictionaryPage) {
-		const regex = new RegExp(`(?<!<[^<>]*)\\b${word}\\b(?![^<>]*>)`, "gui");
-		const injection = `<progressive-immersion-word data_original="${word}" data_translated="${dictionaryPage[word]}">${dictionaryPage[word]}</progressive-immersion-word>`
-		elem.innerHTML = elem.innerHTML.replaceAll(regex, injection);
-	}
+	const regex = new RegExp('(?<!<[^<>]*)\\b(' +
+		Object.keys(dictionaryPage).join('|')
+		+ ')\\b(?![^<>]*>)', "gui");
+	
+	elem.innerHTML = elem.innerHTML.replaceAll(regex, (match) => {
+		const word = match.toLowerCase();
+		return `<progressive-immersion-word data_original="${match}" data_translated="${dictionaryPage[word]}">${dictionaryPage[word]}</progressive-immersion-word>`;
+	});
 
 	const wordElements = elem.getElementsByTagName("progressive-immersion-word");
 	for (let word of wordElements) {
