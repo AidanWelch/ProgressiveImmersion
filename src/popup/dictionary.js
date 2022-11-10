@@ -3,7 +3,8 @@ import { browser } from "../config";
 const dictionary = document.getElementById("dictionary");
 const [originIso, targetIso, originName, targetName] = window.location.hash.slice(1).split("~");
 
-document.getElementById("title").textContent = originName + " -> " + targetName;
+document.getElementById("source-title").textContent = originName;
+document.getElementById("target-title").textContent = targetName;
 
 browser.storage.local.get("dictionary").then( value => {
 	if (value.dictionary === undefined) {
