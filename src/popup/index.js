@@ -86,6 +86,5 @@ document.getElementById("exclusionListMode").oninput = () => {
 };
 
 document.getElementById("exclusionList").addEventListener("input", () => {
-	console.log(document.getElementById("exclusionList").value)
 	browser.storage.local.set({exclusionList: document.getElementById("exclusionList").value.trim().split("\n")});
 });

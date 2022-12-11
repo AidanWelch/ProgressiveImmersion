@@ -3,8 +3,7 @@ import {
 	LANGUAGES
 } from "../config";
 
-document.getElementById("title").innerHTML = 
-	(window.location.hash === "#origin") ? "Source Language" : "Target Language";
+document.getElementById("title").innerHTML = (window.location.hash === "#origin") ? "Source Language" : "Target Language";
 
 const languageList = document.getElementById("languageList");
 
@@ -12,7 +11,7 @@ for (let isoCode in LANGUAGES) {
 	if (typeof LANGUAGES[isoCode] === "function") {
 		continue;
 	}
-	if (window.location.hash.slice(1) === "target" && isoCode === "auto") {
+	if (window.location.hash === "#target" && isoCode === "auto") {
 		continue;
 	}
 	const listItem = document.createElement("li");

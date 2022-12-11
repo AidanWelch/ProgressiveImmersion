@@ -1,6 +1,6 @@
 function translate (elem, dictionary, origin, target) {
 
-	if (origin === undefined || target === undefined || dictionary === undefined || dictionary[origin] === undefined || dictionary[origin][target] === undefined) {
+	if (dictionary?.[origin]?.[target] === undefined) {
 		return;
 	}
 

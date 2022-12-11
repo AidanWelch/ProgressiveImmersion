@@ -10,9 +10,9 @@ let filterMaxShareOfWords = DEFAULT_FILTER_MAX_SHARE_OF_WORDS;
 let filterMinShareOfWords = DEFAULT_FILTER_MIN_SHARE_OF_WORDS;
 
 browser.storage.local.get(["filterMaxShareOfWords", "filterMinShareOfWords", "wordsToSave"]).then( value => {
-	filterMaxShareOfWords = value.filterMaxShareOfWords !== undefined ? value.filterMaxShareOfWords : filterMaxShareOfWords;
-	filterMinShareOfWords = value.filterMinShareOfWords !== undefined ? value.filterMinShareOfWords : filterMinShareOfWords;
-	wordsToSave = value.wordsToSave !== undefined ? value.wordsToSave : wordsToSave;
+	filterMaxShareOfWords = value.filterMaxShareOfWords ?? filterMaxShareOfWords;
+	filterMinShareOfWords = value.filterMinShareOfWords ?? filterMinShareOfWords;
+	wordsToSave = value.wordsToSave ?? wordsToSave;
 });
 
 

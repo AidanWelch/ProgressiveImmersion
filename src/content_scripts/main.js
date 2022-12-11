@@ -15,7 +15,7 @@ browser.storage.local.get(["state", "dictionary", "origin", "target", "minWordLe
 	
 	let isExcluded = false;
 
-	value.exclusionListMode = value.exclusionListMode === undefined ? "blacklist" : value.exclusionListMode;
+	value.exclusionListMode = value.exclusionListMode ?? "blacklist";
 	
 	if (value.exclusionList !== undefined) {
 		isExcluded = value.exclusionList.some( exclusion => {
@@ -30,11 +30,11 @@ browser.storage.local.get(["state", "dictionary", "origin", "target", "minWordLe
 		dictionary = value.dictionary;
 		origin = value.origin;
 		target = value.target;
-		minWordLength = value.minWordLength !== undefined ? value.minWordLength : minWordLength;
+		minWordLength = value.minWordLength ?? minWordLength;
 		const matchTags = ["p", "h1", "h2", "h3", "h4", "h5", "h6", "li", "th", "td", "span", "a"];       
 		matchTags.forEach((tag) => {
 			const elems = document.body.getElementsByTagName(tag);
-			for(var i = 0; i < elems.length; i++){
+			for(let i = 0; i < elems.length; i++){
 				if(elems.item(i).textContent){
 					viewObserver.observe(elems.item(i));
 				}
@@ -47,9 +47,9 @@ const viewObserver = new IntersectionObserver((entries) =>{
 	entries.forEach(entry => {
 		if(entry.isIntersecting && !entry.target.analyzed){
 			entry.target.analyzed = true;
-			var words = entry.target.innerText.match(/[\p{L}-]+/ug);
+			const words = entry.target.innerText.match(/[\p{L}-]+/ug);
 			if(words){
-				for(var word of words){
+				for(const word of words){
 					if(word.length >= minWordLength){
 						countWord(word.toLowerCase());
 					}
