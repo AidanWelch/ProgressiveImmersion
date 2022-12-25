@@ -28,7 +28,7 @@
 	"homepage": "https://github.com/AidanWelch/ProgressiveImmersion",
 	"devDependencies": {
 		"copy-webpack-plugin": "^11.0.0",
-		"google-translate-api-x": "^10.5.0",
+		"google-translate-api-x": "^10.5.1",
 		"web-ext": "^7.4.0",
 		"webextension-polyfill": "^0.10.0",
 		"webpack": "^5.75.0",
