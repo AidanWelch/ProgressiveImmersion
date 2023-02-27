@@ -11,11 +11,9 @@
 		"webRequest",
 		"alarms",
 		"storage",
+		"downloads",
 		"unlimitedStorage",
-		"https://ssl.gstatic.com/*",
-		"https://translate.google.com/*",
-		"*://*.google.com/*",
-		"*://.google.com/*"
+		"https://translate.google.com/*"
 	],
 	"browser_action": {
 		"default_icon": "images/logo-32.png",
