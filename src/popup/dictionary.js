@@ -35,6 +35,13 @@ browser.storage.local.get("dictionary").then( value => {
 		}
 	});
 
+	document.addEventListener("keypress", (e) => {
+		if (e.key === "Enter") {
+			e.preventDefault();
+			document.getElementById("submit-word").click();
+		}
+	});
+
 	function drawTranslation (original, translated) {
 		const row = dictionary.insertRow(dictionary.rows.length - 1);
 	
@@ -61,4 +68,21 @@ browser.storage.local.get("dictionary").then( value => {
 		caption.classList.add('w3-blue', 'w3-card');
 		caption.textContent = "Your dictionary is currently empty, try using the extension more.  Or, you can add words manually below.";
 	}
+
+	document.getElementById("export-button").addEventListener("click", e => {
+		if (Object.keys(value.dictionary[originIso][targetIso]).length === 0) {
+			return;
+		}
+		const downloadData = {};
+		downloadData[originIso] = {};
+		downloadData[originIso][targetIso] = value.dictionary[originIso][targetIso];
+		const blob = new Blob([JSON.stringify(downloadData)], {
+			type: "application/json",
+		});
+		browser.downloads.download({
+			filename: originIso + "-to-" + targetIso + ".json",
+			saveAs: true,
+			url: URL.createObjectURL(blob, { oneTimeOnly: true }),
+		});
+	});
 });

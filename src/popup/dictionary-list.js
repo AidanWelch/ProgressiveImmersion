@@ -29,5 +29,17 @@ browser.storage.local.get(["dictionary", "target", "origin"]).then( value => {
 			dictionaryList.appendChild(listItem);
 		}
 	}
+	const importFileElem = document.getElementById("import-file");
+	importFileElem.addEventListener("change", e => {
+		if (e.target.files.length === 0) {
+			return;
+		}
+		e.target.files[0].text().then(text => {
+			console.log(text)
+		});
+	});
+	document.getElementById("import-button").addEventListener("click", e => {
+		importFileElem.click();
+	});
 
 });
