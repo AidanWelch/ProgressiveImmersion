@@ -1,5 +1,6 @@
 const path = require("path");
 const CopyPlugin = require("copy-webpack-plugin");
+const PACKAGE = require("./package.json");
 
 module.exports = (env, argv) => [
 	{
@@ -22,7 +23,10 @@ module.exports = (env, argv) => [
 				patterns: [
 					{
 						from: (env.manifest === 'v3') ? path.resolve(__dirname, 'src', 'manifest-v3.json') : path.resolve(__dirname, 'src', 'manifest-v2.json'),
-						to: 'manifest.json'
+						to: 'manifest.json',
+						transform(content, absoluteFrom) {
+							return content.toString().replaceAll('VERSION', PACKAGE.version);
+						}
 					},
 					{
 						context: path.resolve(__dirname, 'src'),
