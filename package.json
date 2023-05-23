@@ -21,13 +21,16 @@
 		"pack-v2": "webpack --mode=development --env manifest=v2",
 		"serve-pack-v2": "webpack serve --mode=development --env manifest=v2",
 		"serve-ext-v2": "web-ext run --devtools",
-		"build-v2": "npx webpack --mode=production --env manifest=v2 && npx web-ext build"
+		"build-v2": "npx webpack --mode=production --env manifest=v2 && npx web-ext build",
+		"lint": "eslint \"./src/**/*{.js,.cjs,.mjs}\"",
+		"fix-lint": "eslint \"./src/**/*{.js,.cjs,.mjs}\" --fix"
 	},
 	"author": "Aidan Welch",
 	"license": "Apache-2.0",
 	"homepage": "https://github.com/AidanWelch/ProgressiveImmersion",
 	"devDependencies": {
 		"copy-webpack-plugin": "^11.0.0",
+		"eslint": "^8.41.0",
 		"google-translate-api-x": "^10.5.2",
 		"web-ext": "^7.4.0",
 		"webextension-polyfill": "^0.10.0",

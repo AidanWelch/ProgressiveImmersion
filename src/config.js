@@ -1,13 +1,16 @@
-import browser from "webextension-polyfill";
-if (!browser.action) {
+import browser from 'webextension-polyfill';
+
+if ( !browser.action ) {
 	browser.action = browser.browserAction;
 }
-const { languages: LANGUAGES }  = require("google-translate-api-x");
+
+const { languages: LANGUAGES } = require( 'google-translate-api-x' );
+
 const DEFAULT_UPDATE_FREQUENCY = 12;
 const DEFAULT_MIN_WORD_LENGTH = 4;
 const DEFAULT_WORDS_TO_SAVE = 5;
 const DEFAULT_FILTER_MAX_SHARE_OF_WORDS = 0.0075;
-const DEFAULT_FILTER_MIN_SHARE_OF_WORDS = 0.001
+const DEFAULT_FILTER_MIN_SHARE_OF_WORDS = 0.001;
 
 export {
 	browser,
