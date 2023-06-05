@@ -29,7 +29,7 @@ function updateDictionary (){
 			}
 		}
 
-		translate( word[0], { from: value.origin, to: value.target }).then( res => {
+		translate( word[0], { from: value.origin, to: value.target, forceBatch: false }).then( res => {
 			value.dictionary[value.origin][value.target][word[0]] = res.text;
 			browser.storage.local.set({
 				dictionary: value.dictionary,
