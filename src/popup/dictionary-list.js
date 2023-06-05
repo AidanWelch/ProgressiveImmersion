@@ -40,7 +40,10 @@ browser.storage.local.get( [ 'dictionary', 'target', 'origin' ] ).then( value =>
 			console.log( text );
 		});
 	});
+
+/* TODO
 	document.getElementById( 'import-button' ).addEventListener( 'click', e => {
 		importFileElem.click();
 	});
+*/
 });

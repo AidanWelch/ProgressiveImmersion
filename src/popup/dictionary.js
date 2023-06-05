@@ -69,6 +69,7 @@ browser.storage.local.get( 'dictionary' ).then( value => {
 		caption.textContent = 'Your dictionary is currently empty, try using the extension more.  Or, you can add words manually below.';
 	}
 
+/* TODO
 	document.getElementById( 'export-button' ).addEventListener( 'click', e => {
 		if ( Object.keys( value.dictionary[originIso][targetIso] ).length === 0 ) {
 			return;
@@ -84,4 +85,5 @@ browser.storage.local.get( 'dictionary' ).then( value => {
 			url: URL.createObjectURL( blob, { oneTimeOnly: true })
 		});
 	});
+*/
 });
