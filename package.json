@@ -1,6 +1,6 @@
 {
 	"name": "progressiveimmersion",
-	"version": "0.8.4",
+	"version": "0.8.5",
 	"description": "A browser extension for progressive immersion in a language.",
 	"repository": {
 		"type": "git",
@@ -31,7 +31,7 @@
 	"devDependencies": {
 		"copy-webpack-plugin": "^11.0.0",
 		"eslint": "^8.41.0",
-		"google-translate-api-x": "^10.6.5",
+		"google-translate-api-x": "^10.6.7",
 		"web-ext": "^7.4.0",
 		"webextension-polyfill": "^0.10.0",
 		"webpack": "^5.75.0",

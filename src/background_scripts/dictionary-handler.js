@@ -1,8 +1,10 @@
 import { browser } from '../config';
 import translate from 'google-translate-api-x';
 
+const MAX_TRANSLATE_ATTEMPTS = 3;
+
 function updateDictionary (){
-	browser.storage.local.get( [ 'wordpack', 'wordpackIndex', 'wordQueue', 'origin', 'target', 'dictionary' ] ).then( value => {
+	browser.storage.local.get( [ 'wordpack', 'wordpackIndex', 'wordQueue', 'origin', 'target', 'dictionary' ] ).then( async value => {
 		if ( value.origin === undefined || value.target === undefined || value.wordQueue === undefined || value.wordQueue.length === 0 ) {
 			return;
 		}
@@ -29,13 +31,22 @@ function updateDictionary (){
 			}
 		}
 
-		translate( word[0], { from: value.origin, to: value.target, forceBatch: false }).then( res => {
-			value.dictionary[value.origin][value.target][word[0]] = res.text;
-			browser.storage.local.set({
-				dictionary: value.dictionary,
-				wordQueue: value.wordQueue
-			});
-		});
+		let attempts = 0;
+		let passed = false;
+		while ( attempts < MAX_TRANSLATE_ATTEMPTS && !passed ) {
+			await translate( word[0], { from: value.origin, to: value.target, forceBatch: false })
+				.then( res => {
+					value.dictionary[value.origin][value.target][word[0]] = res.text;
+					browser.storage.local.set({
+						dictionary: value.dictionary,
+						wordQueue: value.wordQueue
+					});
+					passed = true;
+				})
+				.catch( () => {
+					attempts++;
+				});
+		}
 	});
 }
 
