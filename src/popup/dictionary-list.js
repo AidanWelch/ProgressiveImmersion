@@ -30,6 +30,7 @@ browser.storage.local.get( [ 'dictionary', 'target', 'origin' ] ).then( value =>
 		}
 	}
 
+/* TODO
 	const importFileElem = document.getElementById( 'import-file' );
 	importFileElem.addEventListener( 'change', e => {
 		if ( e.target.files.length === 0 ) {
@@ -41,7 +42,6 @@ browser.storage.local.get( [ 'dictionary', 'target', 'origin' ] ).then( value =>
 		});
 	});
 
-/* TODO
 	document.getElementById( 'import-button' ).addEventListener( 'click', e => {
 		importFileElem.click();
 	});
