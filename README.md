@@ -20,6 +20,8 @@ A browser extension that progressively immerses you in a language.
 
 ## [Firefox](https://addons.mozilla.org/en-US/firefox/addon/progressive-immersion/)
 
+## [Chrome](https://chrome.google.com/webstore/detail/progressive-immersion/glhikloekamfeiakikebcndppkgldloj)
+
 ## Build
 
 Just two commands!
