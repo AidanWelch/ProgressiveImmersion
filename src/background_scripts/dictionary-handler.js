@@ -36,7 +36,7 @@ function updateDictionary (){
 		while ( attempts < MAX_TRANSLATE_ATTEMPTS && !passed ) {
 			await translate( word[0], { from: value.origin, to: value.target, forceBatch: false })
 				.then( res => {
-					value.dictionary[value.origin][value.target][word[0]] = res.text;
+					value.dictionary[value.origin][value.target][word[0]] = res.text.toLowerCase();
 					browser.storage.local.set({
 						dictionary: value.dictionary,
 						wordQueue: value.wordQueue
