@@ -57,6 +57,10 @@ browser.storage.local.get( [ 'state', 'dictionary', 'origin', 'target', 'minWord
 		});
 	}
 
+	if ( !value.state || isExcluded ){
+		return;
+	}
+
 	// this method of element selection is currently leading to a lot double(or more) tallying of words
 	// but it is at least in some form needed for dynamically rendered sites(like gmail)
 	// the double counting doesn't seem to be harming word selection for now but if it gets bad
@@ -97,32 +101,30 @@ browser.storage.local.get( [ 'state', 'dictionary', 'origin', 'target', 'minWord
 		childList: true
 	});
 
-	if ( value.state && !isExcluded ){
-		dictionary = value.dictionary;
-		origin = value.origin;
-		target = value.target;
-		minWordLength = value.minWordLength ?? minWordLength;
+	dictionary = value.dictionary;
+	origin = value.origin;
+	target = value.target;
+	minWordLength = value.minWordLength ?? minWordLength;
 
-		const elems = document.body.querySelectorAll( TAGS_TO_TRANSLATE.join( ',' ) );
-		for ( const elem of elems ){
-			// elem.style.backgroundColor = "#0A0A0A" // For debugging
-			if ( elem.innerText ){
-				viewObserver.observe( elem );
-			}
-
-			mutationObserver.observe( elem, { characterData: true, attributes: true });
+	const elems = document.body.querySelectorAll( TAGS_TO_TRANSLATE.join( ',' ) );
+	for ( const elem of elems ){
+		// elem.style.backgroundColor = "#0A0A0A" // For debugging
+		if ( elem.innerText ){
+			viewObserver.observe( elem );
 		}
 
-		const nestedElems = document.body.querySelectorAll( TAGS_TO_TRANSLATE_WHEN_NESTED_IN_TRACKED_TAGS.join( ',' ) );
-		for ( const nestedElem of nestedElems ) {
-			if ( checkAncestorInTags( nestedElem, TAGS_TO_TRANSLATE ) ){
-				// nestedElem.style.backgroundColor = "#A00000" // For debugging
-				if ( nestedElem.innerText ) {
-					viewObserver.observe( nestedElem );
-				}
+		mutationObserver.observe( elem, { characterData: true, attributes: true });
+	}
 
-				mutationObserver.observe( nestedElem, { characterData: true, attributes: true });
+	const nestedElems = document.body.querySelectorAll( TAGS_TO_TRANSLATE_WHEN_NESTED_IN_TRACKED_TAGS.join( ',' ) );
+	for ( const nestedElem of nestedElems ) {
+		if ( checkAncestorInTags( nestedElem, TAGS_TO_TRANSLATE ) ){
+			// nestedElem.style.backgroundColor = "#A00000" // For debugging
+			if ( nestedElem.innerText ) {
+				viewObserver.observe( nestedElem );
 			}
+
+			mutationObserver.observe( nestedElem, { characterData: true, attributes: true });
 		}
 	}
 });
