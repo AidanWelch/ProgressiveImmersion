@@ -15,7 +15,7 @@ function capitalizationPermutations ( stringArray ){
 	return result;
 }
 
-const TAGS_TO_TRANSLATE = capitalizationPermutations( [ 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'li', 'th', 'td', 'a', 'i', 'em', 'strong', 'mark', 'ul', 'main' ] );
+const TAGS_TO_TRANSLATE = capitalizationPermutations( [ 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'li', 'th', 'td', 'a', 'i', 'em', 'strong', 'mark', 'ul', 'main', 'yt-formatted-string', 'yt-attributed-string' ] );
 const TAGS_TO_TRANSLATE_WHEN_NESTED_IN_TRACKED_TAGS = capitalizationPermutations( [ 'div', 'span' ] ); // thanks tagName for being inconsistent!
 
 let dictionary = undefined;
@@ -88,7 +88,11 @@ browser.storage.local.get( [ 'state', 'dictionary', 'origin', 'target', 'minWord
 						mutationObserver.observe( node, { characterData: true, attributes: true });
 					}
 
-					for ( const child of node.childNodes ) {
+					if ( node.nodeType !== Node.ELEMENT_NODE ) {
+						return;
+					}
+
+					for ( const child of node.children ) {
 						observeNodesAndChildren( child );
 					}
 				})( addedNode );
@@ -129,89 +133,47 @@ browser.storage.local.get( [ 'state', 'dictionary', 'origin', 'target', 'minWord
 	}
 });
 
-const matchLetter = /\p{L}/u;
 const viewObserver = new IntersectionObserver( ( entries ) => {
-	entries.forEach( entry => {
+	// could use the `d` regex flag but I think it is actually less clear than just
+	// using the match length
+	// the regex in this scope to preven the same regex being called by multiple
+	// insersections causing the `.lastIndex` being written to simulatenously
+	const matchWords = /(?<=^|[\P{L}])(?<![0-9])\p{L}+(?![0-9])(?=$|\P{L})/gu;
+	// first it checks if the word is preceded by a non-letter or the start
+	// next it checks that its not preceded by a number
+	// next it checks for 1 or more unicode letters
+	// next it checks that its not followed by a number
+	// last it checks that it is followed by the end of the string or non-letters
+	for ( const entry of entries ) {
 		/* entry.target.style.backgroundColor = "#AA0000"; // For debugging
-		if ( entry.isIntersecting && entry.target.analyzed) {
+		if ( entry.isIntersecting && entry.target.progressiveImmersionAnalyzed) {
 			entry.target.style.backgroundColor = "#00AA00";
 		} */
 
-		if ( entry.isIntersecting && !entry.target.analyzed ){
-			// entry.target.style.backgroundColor = "#0000AA"; // For debugging
-			entry.target.analyzed = true;
-			const innerHTML = entry.target.innerHTML;
-			let result = '';
-			let inTag = false;
-			let inTagString = false;
-			let inWord = false;
-			// let inUrl = false; // to prevent for example https://freedwave.com/test/ from matching "freedwave", "com", or "test" TODO - also avoid filepaths
-			let inEscapedSymbol = false;
-			let wordStart = 0;
-			for ( let i = 0; i < innerHTML.length; i++ ) {
-				if ( inTag ) {
-					if ( innerHTML[i] === '"' ) {
-						inTagString = !inTagString;
-					} else if ( innerHTML[i] === '>' && !inTagString ) {
-						inTag = false;
-					}
+		if ( !entry.isIntersecting || entry.target.progressiveImmersionAnalyzed ) {
+			continue;
+		}
 
-					result += innerHTML[i];
-					continue;
-				}
+		entry.target.progressiveImmersionAnalyzed = true;
+		// entry.target.style.backgroundColor = "#0000AA"; // For debugging
 
-				if ( matchLetter.test( innerHTML[i] ) & !inEscapedSymbol ) {
-					if ( !inWord ) {
-						inWord = true;
-						wordStart = i;
-					}
-
-					continue;
-				} else if ( inWord ) {
-					const word = innerHTML.slice( wordStart, i );
-					const wordLower = word.toLowerCase();
-					if ( word.length >= minWordLength ) {
-						countWord( wordLower );
-					}
-
-					result += translate( wordLower, word, dictionary, origin, target );
-					inWord = false;
-				} else {
-					inEscapedSymbol = false;
-				}
-
-				if ( innerHTML[i] === '<' ) {
-					inTag = true;
-				}
-
-				if ( innerHTML[i] === '&' ) {
-					inEscapedSymbol = true;
-				}
-
-				result += innerHTML[i];
+		for ( const node of entry.target.childNodes ){
+			if ( node.nodeType !== Node.TEXT_NODE ) {
+				continue;
 			}
 
-			if ( inWord ) {
-				const word = innerHTML.slice( wordStart, innerHTML.length );
+			matchWords.lastIndex = 0;
+			let matchedArray;
+			while ( ( matchedArray = matchWords.exec( node.textContent ) ) !== null ) {
+				const [ word ] = matchedArray;
+
 				const wordLower = word.toLowerCase();
 				if ( word.length >= minWordLength ) {
 					countWord( wordLower );
 				}
 
-				result += translate( wordLower, word, dictionary, origin, target );
-			}
-
-			entry.target.innerHTML = result;
-
-			const wordElements = entry.target.getElementsByTagName( 'progressive-immersion-word' );
-			for ( const word of wordElements ) {
-				word.addEventListener( 'mouseover', e => {
-					e.target.textContent = e.target.getAttribute( 'data_original' );
-				});
-				word.addEventListener( 'mouseout', e => {
-					e.target.textContent = e.target.getAttribute( 'data_translated' );
-				});
+				translate( wordLower, matchedArray, node, entry.target, dictionary, origin, target );
 			}
 		}
-	});
+	}
 });
