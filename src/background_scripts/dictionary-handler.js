@@ -1,7 +1,5 @@
 import { browser } from '../config';
-import translate from 'google-translate-api-x';
-
-const MAX_TRANSLATE_ATTEMPTS = 3;
+import translateWord from '../translateWord';
 
 function updateDictionary (){
 	browser.storage.local.get( [ 'wordpack', 'wordpackIndex', 'wordQueue', 'origin', 'target', 'dictionary' ] ).then( async value => {
@@ -31,22 +29,13 @@ function updateDictionary (){
 			}
 		}
 
-		let attempts = 0;
-		let passed = false;
-		while ( attempts < MAX_TRANSLATE_ATTEMPTS && !passed ) {
-			await translate( word[0], { from: value.origin, to: value.target, forceBatch: false })
-				.then( res => {
-					value.dictionary[value.origin][value.target][word[0]] = res.text.toLowerCase();
-					browser.storage.local.set({
-						dictionary: value.dictionary,
-						wordQueue: value.wordQueue
-					});
-					passed = true;
-				})
-				.catch( () => {
-					attempts++;
-				});
-		}
+		try {
+			value.dictionary[value.origin][value.target][word[0]] = await translateWord( word[0], value.origin, value.target );
+			browser.storage.local.set({
+				dictionary: value.dictionary,
+				wordQueue: value.wordQueue
+			});
+		} catch ( _ ) { null; }
 	});
 }
 

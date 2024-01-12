@@ -1,4 +1,5 @@
 import { browser } from '../config';
+import translateWord from '../translateWord';
 
 const dictionary = document.getElementById( 'dictionary' );
 const [ originIso, targetIso, originName, targetName ] = window.location.hash.slice( 1 ).split( '~' );
@@ -25,14 +26,25 @@ browser.storage.local.get( 'dictionary' ).then( value => {
 
 	const sourceWordInput = document.getElementById( 'source-word' );
 	const translatedWordInput = document.getElementById( 'translated-word' );
-	document.getElementById( 'submit-word' ).addEventListener( 'click', e => {
-		if ( sourceWordInput.value !== '' && translatedWordInput.value !== '' ) {
-			value.dictionary[originIso][targetIso][sourceWordInput.value.toLowerCase()] = translatedWordInput.value.toLowerCase();
-			browser.storage.local.set({ dictionary: value.dictionary });
-			drawTranslation( sourceWordInput.value.toLowerCase(), translatedWordInput.value.toLowerCase() );
-			sourceWordInput.value = '';
-			translatedWordInput.value = '';
+	document.getElementById( 'submit-word' ).addEventListener( 'click', async e => {
+		if ( sourceWordInput.value === '' ) {
+			return;
 		}
+
+		const sourceWord = sourceWordInput.value.toLowerCase();
+		if ( translatedWordInput.value === '' ) {
+			try {
+				translatedWordInput.value = await translateWord( sourceWord, originIso, targetIso );
+			} catch ( _ ) {
+				return;
+			}
+		}
+
+		value.dictionary[originIso][targetIso][sourceWord] = translatedWordInput.value.toLowerCase();
+		browser.storage.local.set({ dictionary: value.dictionary });
+		drawTranslation( sourceWord, translatedWordInput.value.toLowerCase() );
+		sourceWordInput.value = '';
+		translatedWordInput.value = '';
 	});
 
 	document.addEventListener( 'keypress', ( e ) => {
