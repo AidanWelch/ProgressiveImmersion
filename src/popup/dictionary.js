@@ -126,10 +126,9 @@ browser.storage.local.get( 'dictionary' ).then( value => {
 		importFileInput.click();
 	});
 
-	const deleteBtn = document.getElementById( 'deleteAllButton' );
+	const deleteButton = document.getElementById( 'deleteAllButton' );
 	let deleteTimeout;
-
-	deleteBtn?.addEventListener( 'click', () => {
+	deleteButton.addEventListener( 'click', () => {
 		const currentDict = value.dictionary[originIso][targetIso];
 
 		if ( Object.keys( currentDict ).length === 0 ) {
@@ -137,19 +136,19 @@ browser.storage.local.get( 'dictionary' ).then( value => {
 			return;
 		}
 
-		if ( deleteBtn.dataset.confirming === 'true' ) {
+		if ( deleteButton.dataset.confirming === 'true' ) {
 			value.dictionary[originIso][targetIso] = {};
 
 			browser.storage.local.set({ dictionary: value.dictionary }).then( () => {
 				window.location.reload();
 			});
 		} else {
-			deleteBtn.dataset.confirming = 'true';
-			deleteBtn.textContent = 'Confirm?';
+			deleteButton.dataset.confirming = 'true';
+			deleteButton.textContent = 'Confirm?';
 
 			deleteTimeout = setTimeout( () => {
-				deleteBtn.dataset.confirming = 'false';
-				deleteBtn.textContent = 'Delete All';
+				deleteButton.dataset.confirming = 'false';
+				deleteButton.textContent = 'Delete All';
 			}, 3000 );
 		}
 	});
