@@ -132,7 +132,7 @@ browser.storage.local.get( 'dictionary' ).then( value => {
 	deleteBtn?.addEventListener( 'click', () => {
 		const currentDict = value.dictionary[originIso][targetIso];
 
-		if ( !currentDict || Object.keys( currentDict ).length === 0 ) {
+		if ( Object.keys( currentDict ).length === 0 ) {
 			alert( 'Dictionary is already empty.' );
 			return;
 		}
