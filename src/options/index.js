@@ -96,3 +96,54 @@ document.getElementById( 'filterMinShareOfWordsReset' ).onclick = () => {
 	document.getElementById( 'filterMinShareOfWords' ).value = DEFAULT_FILTER_MIN_SHARE_OF_WORDS;
 	browser.storage.local.set({ filterMinShareOfWords: DEFAULT_FILTER_MIN_SHARE_OF_WORDS });
 };
+
+document.getElementById( 'exportProgress' ).addEventListener( 'click', async () => {
+	const data = await browser.storage.local.get( null );
+
+	const json = JSON.stringify( data, null, 2 );
+	const blob = new Blob( [ json ], { type: 'application/json' });
+	const url = URL.createObjectURL( blob );
+
+	const timestamp = new Date().toISOString()
+		.split( 'T' )[0];
+
+	await browser.downloads.download({
+		url: url,
+		filename: `progressive-immersion-backup-${timestamp}.json`,
+		saveAs: true
+	});
+});
+
+const importProgressInput = document.getElementById( 'importProgressFile' );
+
+document.getElementById( 'importProgress' ).addEventListener( 'click', () => {
+	importProgressInput.click();
+});
+
+importProgressInput.addEventListener( 'change', ( e ) => {
+	const file = e.target.files[0];
+	if ( !file ) { return; }
+
+	const reader = new FileReader();
+
+	reader.onload = async ( event ) => {
+		try {
+			const data = JSON.parse( event.target.result );
+
+			if ( typeof data !== 'object' || data === null ) {
+				throw new Error( 'Invalid JSON format' );
+			}
+
+			await browser.storage.local.clear();
+			await browser.storage.local.set( data );
+
+			window.location.reload();
+		} catch ( error ) {
+			// Import failed – ignore silently
+		}
+	};
+
+	reader.readAsText( file );
+
+	e.target.value = '';
+});
