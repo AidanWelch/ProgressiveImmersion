@@ -127,7 +127,6 @@ browser.storage.local.get( 'dictionary' ).then( value => {
 	});
 
 	const deleteButton = document.getElementById( 'deleteAllButton' );
-	let deleteTimeout;
 	deleteButton.addEventListener( 'click', () => {
 		const currentDict = value.dictionary[originIso][targetIso];
 
@@ -146,7 +145,7 @@ browser.storage.local.get( 'dictionary' ).then( value => {
 			deleteButton.dataset.confirming = 'true';
 			deleteButton.textContent = 'Confirm?';
 
-			deleteTimeout = setTimeout( () => {
+			setTimeout( () => {
 				deleteButton.dataset.confirming = 'false';
 				deleteButton.textContent = 'Delete All';
 			}, 3000 );
