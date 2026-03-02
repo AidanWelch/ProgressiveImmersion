@@ -126,6 +126,32 @@ browser.storage.local.get( 'dictionary' ).then( value => {
 		importFileInput.click();
 	});
 
+	const deleteButton = document.getElementById( 'deleteAllButton' );
+	deleteButton.addEventListener( 'click', () => {
+		const currentDict = value.dictionary[originIso][targetIso];
+
+		if ( Object.keys( currentDict ).length === 0 ) {
+			alert( 'Dictionary is already empty.' );
+			return;
+		}
+
+		if ( deleteButton.dataset.confirming === 'true' ) {
+			value.dictionary[originIso][targetIso] = {};
+
+			browser.storage.local.set({ dictionary: value.dictionary }).then( () => {
+				window.location.reload();
+			});
+		} else {
+			deleteButton.dataset.confirming = 'true';
+			deleteButton.textContent = 'Confirm?';
+
+			setTimeout( () => {
+				deleteButton.dataset.confirming = 'false';
+				deleteButton.textContent = 'Delete All';
+			}, 3000 );
+		}
+	});
+
 
 	importFileInput.addEventListener( 'change', ( e ) => {
 		const file = e.target.files[0];
