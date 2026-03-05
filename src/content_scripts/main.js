@@ -217,3 +217,36 @@ const viewObserver = new IntersectionObserver( ( entries ) => {
 		}
 	}
 });
+
+browser.runtime.onMessage.addListener( ( msg, sender, sendResponse ) => {
+	if ( msg.type === 'GET_CLEAN_SELECTION' ) {
+		const selection = window.getSelection();
+
+		if ( !selection || selection.rangeCount === 0 ) {
+			sendResponse( '' );
+			return true;
+		}
+
+		const range = selection.getRangeAt( 0 );
+
+		const fragment = range.cloneContents();
+		const translatedElements = fragment.querySelectorAll( 'progressive-immersion-word' );
+
+		if ( translatedElements.length === 0 ) {
+			sendResponse( selection.toString() );
+			return true;
+		}
+
+		translatedElements.forEach( elem => {
+			const originalWord = elem.getAttribute( 'data-original-word' );
+			if ( originalWord ) {
+				const textNode = document.createTextNode( originalWord );
+				elem.replaceWith( textNode );
+			}
+		});
+
+		sendResponse( fragment.textContent );
+	}
+
+	return true;
+});

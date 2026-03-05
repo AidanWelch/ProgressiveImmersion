@@ -71,14 +71,25 @@ function updateContextMenu ( originName, targetName ) {
 	});
 }
 
-browser.contextMenus.onClicked.addListener( ( info, tab ) => {
+browser.contextMenus.onClicked.addListener( async ( info, tab ) => {
 	if ( info.menuItemId !== 'translate-add-word-to-dictionary' || !info.selectionText ) {
 		return;
 	}
 
-	browser.storage.local.get( [ 'origin', 'target', 'originNativeName', 'targetNativeName' ] ).then( value => {
-		const word = encodeURIComponent( info.selectionText.trim() );
+	let cleanText = info.selectionText.trim();
 
+	try {
+		const response = await browser.tabs.sendMessage( tab.id, { type: 'GET_CLEAN_SELECTION' });
+
+		if ( response && typeof response === 'string' ) {
+			cleanText = response.trim();
+		}
+	} catch ( error ) {
+		// Ignore errors
+	}
+
+	browser.storage.local.get( [ 'origin', 'target', 'originNativeName', 'targetNativeName' ] ).then( value => {
+		const word = encodeURIComponent( cleanText );
 		const autoTranslate = '&autoTranslate=true';
 
 		const urlFragment = `#${value.origin}~${value.target}~${value.originNativeName}~${value.targetNativeName}`;
