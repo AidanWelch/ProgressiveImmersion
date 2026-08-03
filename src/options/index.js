@@ -96,3 +96,70 @@ document.getElementById( 'filterMinShareOfWordsReset' ).onclick = () => {
 	document.getElementById( 'filterMinShareOfWords' ).value = DEFAULT_FILTER_MIN_SHARE_OF_WORDS;
 	browser.storage.local.set({ filterMinShareOfWords: DEFAULT_FILTER_MIN_SHARE_OF_WORDS });
 };
+
+document.getElementById( 'exportConfig' ).addEventListener( 'click', async () => {
+	const data = await browser.storage.local.get( null );
+
+	const json = JSON.stringify( data, null, 2 );
+	const blob = new Blob( [ json ], { type: 'application/json' });
+	const url = URL.createObjectURL( blob );
+
+	const timestamp = new Date().toISOString()
+		.split( 'T' )[0];
+
+	await browser.downloads.download({
+		url: url,
+		filename: `progressive-immersion-backup-${timestamp}.json`,
+		saveAs: true
+	});
+});
+
+const importConfigInput = document.getElementById( 'importProgressFile' );
+
+document.getElementById( 'importConfig' ).addEventListener( 'click', () => {
+	importConfigInput.click();
+});
+
+importConfigInput.addEventListener( 'change', ( e ) => {
+	const file = e.target.files[0];
+	if ( !file ) { return; }
+
+	const reader = new FileReader();
+
+	reader.onload = async ( event ) => {
+		const warning = prompt( `
+PLEASE READ BEFORE CONTINUING:
+
+Importing a configuration will overwrite your existing configuration,
+permanently deleting everything you have stored.
+
+Importing a config from someone you do not trust also provides a vector for
+them to hack any accounts, manipulating what you see, etc.
+
+Only import a config that you or someone you are sure you can trust
+exported.
+
+Type "yes" to continue.
+` );
+
+		if ( warning.toLowerCase() !== 'yes' ){
+			return;
+		}
+
+		const data = JSON.parse( event.target.result );
+
+		if ( typeof data !== 'object' || data === null ) {
+			alert( 'Invalid imported config format' );
+			return;
+		}
+
+		await browser.storage.local.clear();
+		await browser.storage.local.set( data );
+
+		window.location.reload();
+	};
+
+	reader.readAsText( file );
+
+	e.target.value = '';
+});
