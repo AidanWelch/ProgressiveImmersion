@@ -117,25 +117,6 @@ document.getElementById( 'exportProgress' ).addEventListener( 'click', async () 
 const importProgressInput = document.getElementById( 'importProgressFile' );
 
 document.getElementById( 'importProgress' ).addEventListener( 'click', () => {
-	const warning = prompt( `
-		PLEASE READ BEFORE CONTINUING:
-
-		Importing progress will overwrite your existing progress, permanently
-		deleting everything you have stored.
-
-		Importing progress from someone you do not trust also provides a vector
-		for someone to hack any accounts, manipulating what you see, etc.
-
-		Only import progress that you or someone you are sure you can trust
-		exported.
-
-		Type "yes" to continue.
-	` );
-
-	if ( warning.toLowerCase() !== 'yes' ){
-		return;
-	}
-
 	importProgressInput.click();
 });
 
@@ -146,20 +127,36 @@ importProgressInput.addEventListener( 'change', ( e ) => {
 	const reader = new FileReader();
 
 	reader.onload = async ( event ) => {
-		try {
-			const data = JSON.parse( event.target.result );
+		const warning = prompt( `
+PLEASE READ BEFORE CONTINUING:
 
-			if ( typeof data !== 'object' || data === null ) {
-				throw new Error( 'Invalid JSON format' );
-			}
+Importing progress will overwrite your existing progress, permanently
+deleting everything you have stored.
 
-			await browser.storage.local.clear();
-			await browser.storage.local.set( data );
+Importing progress from someone you do not trust also provides a vector
+for someone to hack any accounts, manipulating what you see, etc.
 
-			window.location.reload();
-		} catch ( error ) {
-			// Import failed – ignore silently
+Only import progress that you or someone you are sure you can trust
+exported.
+
+Type "yes" to continue.
+` );
+
+		if ( warning.toLowerCase() !== 'yes' ){
+			return;
 		}
+
+		const data = JSON.parse( event.target.result );
+
+		if ( typeof data !== 'object' || data === null ) {
+			alert( 'Invalid imported progress format' );
+			return;
+		}
+
+		await browser.storage.local.clear();
+		await browser.storage.local.set( data );
+
+		window.location.reload();
 	};
 
 	reader.readAsText( file );
