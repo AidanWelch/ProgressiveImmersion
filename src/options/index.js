@@ -117,6 +117,25 @@ document.getElementById( 'exportProgress' ).addEventListener( 'click', async () 
 const importProgressInput = document.getElementById( 'importProgressFile' );
 
 document.getElementById( 'importProgress' ).addEventListener( 'click', () => {
+	const warning = prompt( `
+		PLEASE READ BEFORE CONTINUING:
+
+		Importing progress will overwrite your existing progress, permanently
+		deleting everything you have stored.
+
+		Importing progress from someone you do not trust also provides a vector
+		for someone to hack any accounts, manipulating what you see, etc.
+
+		Only import progress that you or someone you are sure you can trust
+		exported.
+
+		Type "yes" to continue.
+	` );
+
+	if ( warning.toLowerCase() !== 'yes' ){
+		return;
+	}
+
 	importProgressInput.click();
 });
 
