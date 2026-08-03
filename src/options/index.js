@@ -112,6 +112,11 @@ document.getElementById( 'exportConfig' ).addEventListener( 'click', async () =>
 		filename: `progressive-immersion-backup-${timestamp}.json`,
 		saveAs: true
 	});
+
+	alert( `
+This file could contain sensitive information from the sites you browse, please
+do not share it with others.
+` );
 });
 
 const importConfigInput = document.getElementById( 'importProgressFile' );
