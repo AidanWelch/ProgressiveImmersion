@@ -20,12 +20,7 @@ customElements.define( 'progressive-immersion-word', ProgressiveImmersionWord );
 // it throws a permission error with the custom element.
 
 
-function translate ( wordLower, matchedArray, textNode, intersectionTarget, dictionary, origin, target ) {
-	if ( dictionary?.[origin]?.[target] === undefined ) {
-		return;
-	}
-
-	const dictionaryPage = dictionary[origin][target];
+function translate ( wordLower, matchedArray, textNode, intersectionTarget, dictionaryPage ) {
 	// `Object.prototype.hasOwnProperty.call` ensures there is no conflict if
 	// a property of a parent of the dictionary page(for example in `.__proto__`)
 	// has the same name as wordLower- like what would cause issues with the `in`

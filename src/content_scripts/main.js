@@ -18,11 +18,6 @@ function capitalizationPermutations ( stringArray ){
 const TAGS_TO_TRANSLATE = capitalizationPermutations( [ 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'li', 'th', 'td', 'a', 'i', 'em', 'strong', 'mark', 'ul', 'main', 'yt-formatted-string', 'yt-attributed-string' ] );
 const TAGS_TO_TRANSLATE_WHEN_NESTED_IN_TRACKED_TAGS = capitalizationPermutations( [ 'div', 'span' ] ); // thanks tagName for being inconsistent!
 
-let dictionary = undefined;
-let origin = undefined;
-let target = undefined;
-let minWordLength = DEFAULT_MIN_WORD_LENGTH;
-
 function checkAncestorInTags ( node, tags ) {
 	if ( !Array.isArray( tags ) ) {
 		tags = [ tags ];
@@ -63,6 +58,75 @@ browser.storage.local.get( [ 'state', 'dictionary', 'origin', 'target', 'minWord
 	if ( !enabledForThisPage || !value.state ){
 		return;
 	}
+
+	const dictionary = value.dictionary;
+	const origin = value.origin;
+	const target = value.target;
+	const minWordLength = value.minWordLength ?? DEFAULT_MIN_WORD_LENGTH;
+
+	const viewObserver = new IntersectionObserver( ( entries ) => {
+		const dictionaryPage = dictionary?.[origin]?.[target] === undefined ?
+			{} : dictionary[origin][target];
+
+		const wordsInDictionary = Object.keys( dictionaryPage )
+			.sort( ( a, b ) => b.length - a.length )
+			.map( w => RegExp.escape( w ) );
+
+		// could use the `d` regex flag but I think it is actually less clear than just
+		// using the match length
+		// the regex in this scope to preven the same regex being called by multiple
+		// insersections causing the `.lastIndex` being written to simulatenously
+		const matchWords = new RegExp(
+			'(?<=^|[\\P{L}])(?<![0-9])(' +
+			// first it checks if the word is preceded by a non-letter or the start
+			// next it checks that its not preceded by a number
+				( wordsInDictionary.length === 0 ? '' : (
+					'(?<dictionaryWord>' + wordsInDictionary.join( '|' ) + ')|'
+				) )+
+				// construct a group matching all words in the dictionary
+				'(\\p{L}+(?:[\'’]\\p{L}+)*)'+
+				// next it checks for 1 or more unicode letters
+			')(?![0-9])(?=$|\\P{L})',
+			// next it checks that its not followed by a number
+			// last it checks that it is followed by the end of the string or non-letters
+			'gui'
+		);
+		for ( const entry of entries ) {
+			/* entry.target.style.backgroundColor = "#AA0000"; // For debugging
+			if ( entry.isIntersecting && entry.target.progressiveImmersionAnalyzed) {
+				entry.target.style.backgroundColor = "#00AA00";
+			} */
+
+			if ( !entry.isIntersecting || entry.target.progressiveImmersionAnalyzed ) {
+				continue;
+			}
+
+			entry.target.progressiveImmersionAnalyzed = true;
+			// entry.target.style.backgroundColor = "#0000AA"; // For debugging
+
+			for ( const node of entry.target.childNodes ){
+				if ( node.nodeType !== Node.TEXT_NODE ) {
+					continue;
+				}
+
+				matchWords.lastIndex = 0;
+				let matchedArray;
+				while ( ( matchedArray = matchWords.exec( node.textContent ) ) !== null ) {
+					const [ word ] = matchedArray;
+					const wordLower = word.toLowerCase();
+
+					if ( matchedArray?.groups?.dictionaryWord !== undefined ) {
+						translate( wordLower, matchedArray, node, entry.target, dictionaryPage );
+						continue;
+					}
+
+					if ( word.length >= minWordLength ) {
+						countWord( wordLower );
+					}
+				}
+			}
+		}
+	});
 
 	// this method of element selection is currently leading to a lot double(or more) tallying of words
 	// but it is at least in some form needed for dynamically rendered sites(like gmail)
@@ -108,11 +172,6 @@ browser.storage.local.get( [ 'state', 'dictionary', 'origin', 'target', 'minWord
 		childList: true
 	});
 
-	dictionary = value.dictionary;
-	origin = value.origin;
-	target = value.target;
-	minWordLength = value.minWordLength ?? minWordLength;
-
 	const elems = document.body.querySelectorAll( TAGS_TO_TRANSLATE.join( ',' ) );
 	for ( const elem of elems ){
 		// elem.style.backgroundColor = "#0A0A0A" // For debugging
@@ -132,52 +191,6 @@ browser.storage.local.get( [ 'state', 'dictionary', 'origin', 'target', 'minWord
 			}
 
 			mutationObserver.observe( nestedElem, { characterData: true, attributes: true });
-		}
-	}
-});
-
-const viewObserver = new IntersectionObserver( ( entries ) => {
-	// could use the `d` regex flag but I think it is actually less clear than just
-	// using the match length
-	// the regex in this scope to preven the same regex being called by multiple
-	// insersections causing the `.lastIndex` being written to simulatenously
-
-	const matchWords = /(?<=^|[\P{L}])(?<![0-9])(\p{L}+(?:['’]\p{L}+)*)(?![0-9])(?=$|\P{L})/gu;
-	// first it checks if the word is preceded by a non-letter or the start
-	// next it checks that its not preceded by a number
-	// next it checks for 1 or more unicode letters
-	// next it checks that its not followed by a number
-	// last it checks that it is followed by the end of the string or non-letters
-	for ( const entry of entries ) {
-		/* entry.target.style.backgroundColor = "#AA0000"; // For debugging
-		if ( entry.isIntersecting && entry.target.progressiveImmersionAnalyzed) {
-			entry.target.style.backgroundColor = "#00AA00";
-		} */
-
-		if ( !entry.isIntersecting || entry.target.progressiveImmersionAnalyzed ) {
-			continue;
-		}
-
-		entry.target.progressiveImmersionAnalyzed = true;
-		// entry.target.style.backgroundColor = "#0000AA"; // For debugging
-
-		for ( const node of entry.target.childNodes ){
-			if ( node.nodeType !== Node.TEXT_NODE ) {
-				continue;
-			}
-
-			matchWords.lastIndex = 0;
-			let matchedArray;
-			while ( ( matchedArray = matchWords.exec( node.textContent ) ) !== null ) {
-				const [ word ] = matchedArray;
-				const wordLower = word.toLowerCase();
-
-				if ( word.length >= minWordLength ) {
-					countWord( wordLower );
-				}
-
-				translate( wordLower, matchedArray, node, entry.target, dictionary, origin, target );
-			}
 		}
 	}
 });
