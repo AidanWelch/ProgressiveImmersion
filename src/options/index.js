@@ -97,7 +97,7 @@ document.getElementById( 'filterMinShareOfWordsReset' ).onclick = () => {
 	browser.storage.local.set({ filterMinShareOfWords: DEFAULT_FILTER_MIN_SHARE_OF_WORDS });
 };
 
-document.getElementById( 'exportProgress' ).addEventListener( 'click', async () => {
+document.getElementById( 'exportConfig' ).addEventListener( 'click', async () => {
 	const data = await browser.storage.local.get( null );
 
 	const json = JSON.stringify( data, null, 2 );
@@ -114,13 +114,13 @@ document.getElementById( 'exportProgress' ).addEventListener( 'click', async () 
 	});
 });
 
-const importProgressInput = document.getElementById( 'importProgressFile' );
+const importConfigInput = document.getElementById( 'importProgressFile' );
 
-document.getElementById( 'importProgress' ).addEventListener( 'click', () => {
-	importProgressInput.click();
+document.getElementById( 'importConfig' ).addEventListener( 'click', () => {
+	importConfigInput.click();
 });
 
-importProgressInput.addEventListener( 'change', ( e ) => {
+importConfigInput.addEventListener( 'change', ( e ) => {
 	const file = e.target.files[0];
 	if ( !file ) { return; }
 
@@ -130,13 +130,13 @@ importProgressInput.addEventListener( 'change', ( e ) => {
 		const warning = prompt( `
 PLEASE READ BEFORE CONTINUING:
 
-Importing progress will overwrite your existing progress, permanently
-deleting everything you have stored.
+Importing a configuration will overwrite your existing configuration,
+permanently deleting everything you have stored.
 
-Importing progress from someone you do not trust also provides a vector
-for someone to hack any accounts, manipulating what you see, etc.
+Importing a config from someone you do not trust also provides a vector for
+them to hack any accounts, manipulating what you see, etc.
 
-Only import progress that you or someone you are sure you can trust
+Only import a config that you or someone you are sure you can trust
 exported.
 
 Type "yes" to continue.
@@ -149,7 +149,7 @@ Type "yes" to continue.
 		const data = JSON.parse( event.target.result );
 
 		if ( typeof data !== 'object' || data === null ) {
-			alert( 'Invalid imported progress format' );
+			alert( 'Invalid imported config format' );
 			return;
 		}
 
