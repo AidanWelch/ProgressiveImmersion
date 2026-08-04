@@ -5,6 +5,42 @@ import {
 import countWord from './analyze';
 import translate from './translate';
 
+document.addEventListener( 'copy', ( event ) => {
+	const selection = window.getSelection();
+
+	if ( selection.rangeCount === 0 ) {
+		return;
+	}
+
+	const range = selection.getRangeAt( 0 );
+
+	const fragment = range.cloneContents();
+
+	const translatedElements = fragment.querySelectorAll( 'progressive-immersion-word' );
+
+	if ( translatedElements.length === 0 ) {
+		return;
+	}
+
+	event.preventDefault();
+
+	translatedElements.forEach( elem => {
+		const originalWord = elem.getAttribute( 'data-original-word' );
+		if ( originalWord ) {
+			const textNode = document.createTextNode( originalWord );
+			elem.replaceWith( textNode );
+		}
+	});
+
+	const tempDiv = document.createElement( 'div' );
+	tempDiv.appendChild( fragment );
+
+	if ( event.clipboardData ) {
+		event.clipboardData.setData( 'text/plain', tempDiv.textContent );
+		event.clipboardData.setData( 'text/html', tempDiv.innerHTML );
+	}
+});
+
 function capitalizationPermutations ( stringArray ){
 	const result = [];
 	for ( const s of stringArray ) {
