@@ -31,8 +31,8 @@ jobs:
         uses: wdzeng/firefox-addon@v1
         with:
           addon-guid: ${{ secrets.FIREFOX_ADDON_ID }}
-          xpi-path: './web-ext-artifact/progressiveimmersion_v2.zip'
-          source-file-path: './source.zip'
+          xpi-path: 'web-ext-artifacts/progressiveimmersion_v2.zip'
+          source-file-path: 'source.zip'
           self-hosted: false
           jwt-issuer: ${{ secrets.FIREFOX_JWT_ISSUER }}
           jwt-secret: ${{ secrets.FIREFOX_JWT_SECRET }}
@@ -45,5 +45,5 @@ jobs:
           client_secret: ${{ secrets.CHROME_SECRET }}
           refresh_token: ${{ secrets.CHROME_TOKEN }}
           extension_id: ${{ secrets.CHROME_EXTENSION_ID }}
-          zip_file: './web-ext-artifact/progressiveimmersion_v3.zip'
+          zip_file: 'web-ext-artifacts/progressiveimmersion_v3.zip'
 
