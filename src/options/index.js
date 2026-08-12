@@ -2,6 +2,7 @@ import {
 	DEFAULT_FILTER_MAX_SHARE_OF_WORDS,
 	DEFAULT_FILTER_MIN_SHARE_OF_WORDS,
 	DEFAULT_MIN_WORD_LENGTH,
+	DEFAULT_PHRASE_TRANSLATION_ENABLED,
 	DEFAULT_UPDATE_FREQUENCY,
 	DEFAULT_WORDS_TO_SAVE,
 	browser
@@ -95,6 +96,21 @@ document.getElementById( 'filterMinShareOfWords' ).oninput = () => {
 document.getElementById( 'filterMinShareOfWordsReset' ).onclick = () => {
 	document.getElementById( 'filterMinShareOfWords' ).value = DEFAULT_FILTER_MIN_SHARE_OF_WORDS;
 	browser.storage.local.set({ filterMinShareOfWords: DEFAULT_FILTER_MIN_SHARE_OF_WORDS });
+};
+
+// Contextual Phrase Translation Option
+const phraseTranslationEnabled = document.getElementById( 'phraseTranslationEnabled' );
+
+browser.storage.local.get( 'phraseTranslationEnabled' ).then( value => {
+	phraseTranslationEnabled.checked = value.phraseTranslationEnabled ??
+		DEFAULT_PHRASE_TRANSLATION_ENABLED;
+	if ( value.phraseTranslationEnabled === undefined ) {
+		browser.storage.local.set({ phraseTranslationEnabled: DEFAULT_PHRASE_TRANSLATION_ENABLED });
+	}
+});
+
+phraseTranslationEnabled.oninput = () => {
+	browser.storage.local.set({ phraseTranslationEnabled: phraseTranslationEnabled.checked });
 };
 
 document.getElementById( 'exportConfig' ).addEventListener( 'click', async () => {

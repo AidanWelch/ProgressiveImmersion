@@ -1,5 +1,14 @@
 import { NEVER_UPDATE_FREQUENCY, browser } from '../config';
+import translatePhrase from './phrase-translation';
 import updateDictionary from './dictionary-handler';
+
+browser.runtime.onMessage.addListener( message => {
+	if ( message?.type === 'translate-phrase' ) {
+		return translatePhrase( message.phrase, message.origin, message.target );
+	}
+
+	return undefined;
+});
 
 browser.storage.local.get( [ 'state', 'latestWordTime', 'updateFrequency', 'origin', 'originNativeName', 'target', 'targetNativeName' ] ).then( value => {
 	if ( value.state === undefined ){

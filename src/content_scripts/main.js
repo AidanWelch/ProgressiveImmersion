@@ -1,9 +1,12 @@
 import {
 	DEFAULT_MIN_WORD_LENGTH,
+	DEFAULT_PHRASE_TRANSLATION_ENABLED,
 	browser
 } from '../config';
+import translate, { translatePhrase } from './translate';
 import countWord from './analyze';
-import translate from './translate';
+
+const MAX_PHRASE_WORDS = 5;
 
 document.addEventListener( 'copy', ( event ) => {
 	const selection = window.getSelection();
@@ -73,7 +76,7 @@ function checkShouldTranslateNode ( node ) {
 	);
 }
 
-browser.storage.local.get( [ 'state', 'dictionary', 'origin', 'target', 'minWordLength', 'exclusionList', 'exclusionListMode' ] ).then( value => {
+browser.storage.local.get( [ 'state', 'dictionary', 'origin', 'target', 'minWordLength', 'exclusionList', 'exclusionListMode', 'phraseTranslationEnabled' ] ).then( value => {
 	value.exclusionListMode = value.exclusionListMode ?? 'blacklist';
 	let enabledForThisPage = true;
 
@@ -99,6 +102,8 @@ browser.storage.local.get( [ 'state', 'dictionary', 'origin', 'target', 'minWord
 	const origin = value.origin;
 	const target = value.target;
 	const minWordLength = value.minWordLength ?? DEFAULT_MIN_WORD_LENGTH;
+	const phraseTranslationEnabled = value.phraseTranslationEnabled ??
+		DEFAULT_PHRASE_TRANSLATION_ENABLED;
 
 	const viewObserver = new IntersectionObserver( ( entries ) => {
 		const dictionaryPage = dictionary?.[origin]?.[target] === undefined ?
@@ -121,7 +126,7 @@ browser.storage.local.get( [ 'state', 'dictionary', 'origin', 'target', 'minWord
 				) )+
 				// construct a group matching all words in the dictionary
 				'(\\p{L}+(?:[\'’]\\p{L}+)*)'+
-				// next it checks for 1 or more unicode letters
+			// next it checks for 1 or more unicode letters
 			')(?![0-9])(?=$|\\P{L})',
 			// next it checks that its not followed by a number
 			// last it checks that it is followed by the end of the string or non-letters
@@ -147,17 +152,46 @@ browser.storage.local.get( [ 'state', 'dictionary', 'origin', 'target', 'minWord
 
 				matchWords.lastIndex = 0;
 				let matchedArray;
+				const phrases = [];
 				while ( ( matchedArray = matchWords.exec( node.textContent ) ) !== null ) {
 					const [ word ] = matchedArray;
 					const wordLower = word.toLowerCase();
 
 					if ( matchedArray?.groups?.dictionaryWord !== undefined ) {
-						translate( wordLower, matchedArray, node, entry.target, dictionaryPage );
+						if ( phraseTranslationEnabled ) {
+							const previousPhrase = phrases[phrases.length - 1];
+							const previousWord = previousPhrase?.[previousPhrase.length - 1];
+							const previousWordEnd = previousWord === undefined ? 0 :
+								previousWord.index + previousWord[0].length;
+							const separator = node.textContent.slice( previousWordEnd, matchedArray.index );
+
+							if (
+								previousPhrase !== undefined &&
+								previousPhrase.length < MAX_PHRASE_WORDS &&
+								/^[^\S\r\n\u2028\u2029]+$/u.test( separator )
+							) {
+								previousPhrase.push( matchedArray );
+							} else {
+								phrases.push( [ matchedArray ] );
+							}
+						} else {
+							translate( wordLower, matchedArray, node, entry.target, dictionaryPage );
+						}
+
 						continue;
 					}
 
 					if ( word.length >= minWordLength ) {
 						countWord( wordLower );
+					}
+				}
+
+				for ( let i = phrases.length - 1; i >= 0; i-- ) {
+					if ( phrases[i].length === 1 ) {
+						const [ word ] = phrases[i];
+						translate( word[0].toLowerCase(), word, node, entry.target, dictionaryPage );
+					} else {
+						translatePhrase( phrases[i], node, entry.target, dictionaryPage, origin, target );
 					}
 				}
 			}
