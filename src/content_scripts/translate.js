@@ -22,6 +22,27 @@ customElements.define( 'progressive-immersion-word', ProgressiveImmersionWord );
 // it throws a permission error with the custom element.
 
 
+function createWordElement ( originalWord, translatedWord ) {
+	const wordElement = document.createElement( 'progressive-immersion-word' );
+	wordElement.setAttribute( 'data-original-word', originalWord );
+	wordElement.setAttribute( 'data-translated-word', translatedWord );
+	wordElement.innerHTML = translatedWord;
+	wordElement.style.borderBottom = '1px dotted currentColor';
+
+	wordElement.showingOriginal = false;
+
+	wordElement.addEventListener( 'mouseover', e => {
+		wordElement.showingOriginal = true;
+		e.target.innerHTML = e.target.getAttribute( 'data-original-word' ) ?? '';
+	});
+	wordElement.addEventListener( 'mouseout', e => {
+		wordElement.showingOriginal = false;
+		e.target.innerHTML = e.target.getAttribute( 'data-translated-word' ) ?? '';
+	});
+
+	return wordElement;
+}
+
 function translate ( wordLower, matchedArray, textNode, intersectionTarget, dictionaryPage ) {
 	// `Object.prototype.hasOwnProperty.call` ensures there is no conflict if
 	// a property of a parent of the dictionary page(for example in `.__proto__`)
@@ -42,18 +63,7 @@ function translate ( wordLower, matchedArray, textNode, intersectionTarget, dict
 		translated = translated.charAt( 0 ).toUpperCase() + translated.slice( 1 );
 	}
 
-	const wordElement = document.createElement( 'progressive-immersion-word' );
-	wordElement.setAttribute( 'data-original-word', originalWord );
-	wordElement.setAttribute( 'data-translated-word', translated );
-
-	wordElement.innerHTML = translated;
-	wordElement.style.borderBottom = '1px dotted currentColor';
-	wordElement.addEventListener( 'mouseover', e => {
-		e.target.innerHTML = e.target.getAttribute( 'data-original-word' ) ?? '';
-	});
-	wordElement.addEventListener( 'mouseout', e => {
-		e.target.innerHTML = e.target.getAttribute( 'data-translated-word' ) ?? '';
-	});
+	const wordElement = createWordElement( originalWord, translated );
 
 	const otherTextHalf = textNode.splitText( wordIndex );
 	otherTextHalf.textContent = otherTextHalf.textContent.slice( originalWord.length );
@@ -85,21 +95,7 @@ function translatePhrase ( matchedWords, textNode, intersectionTarget, dictionar
 			translatedWord + translatedPhrase.slice( relativeIndex + originalWord.length );
 	}
 
-	const phraseElement = document.createElement( 'progressive-immersion-word' );
-	phraseElement.setAttribute( 'data-original-word', originalPhrase );
-	phraseElement.setAttribute( 'data-translated-word', translatedPhrase );
-	phraseElement.textContent = translatedPhrase;
-	phraseElement.style.borderBottom = '1px dotted currentColor';
-
-	let showingOriginal = false;
-	phraseElement.addEventListener( 'mouseover', e => {
-		showingOriginal = true;
-		e.target.textContent = e.target.getAttribute( 'data-original-word' ) ?? '';
-	});
-	phraseElement.addEventListener( 'mouseout', e => {
-		showingOriginal = false;
-		e.target.textContent = e.target.getAttribute( 'data-translated-word' ) ?? '';
-	});
+	const phraseElement = createWordElement( originalPhrase, translatedPhrase );
 
 	const otherTextHalf = textNode.splitText( firstWord.index );
 	otherTextHalf.textContent = otherTextHalf.textContent.slice( originalPhrase.length );
@@ -122,12 +118,11 @@ function translatePhrase ( matchedWords, textNode, intersectionTarget, dictionar
 		}
 
 		phraseElement.setAttribute( 'data-translated-word', translation );
-		if ( !showingOriginal ) {
+		if ( !phraseElement.showingOriginal ) {
 			phraseElement.textContent = translation;
 		}
 	})
 		.catch( () => null );
 }
 
-export { translatePhrase };
-export default translate;
+export { translate, translatePhrase };

@@ -3,7 +3,7 @@ import {
 	DEFAULT_PHRASE_TRANSLATION_ENABLED,
 	browser
 } from '../config';
-import translate, { translatePhrase } from './translate';
+import { translate, translatePhrase } from './translate';
 import countWord from './analyze';
 
 const MAX_PHRASE_WORDS = 5;
