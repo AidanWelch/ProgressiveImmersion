@@ -5,57 +5,67 @@ const MAX_PHRASE_TRANSLATIONS_PER_DAY = 50;
 const PHRASE_TRANSLATION_DELAY = 1500;
 const phraseTranslationsPromise = browser.storage.local.get( 'phraseTranslations' )
 	.then( value => value.phraseTranslations ?? {});
-let translationQueue = Promise.resolve();
+let translationQueue = Promise.resolve( 0 );
 
-function translatePhrase ( phrase, origin, target ) {
+async function translatePhrase ( phrase, origin, target ) {
+	const phraseTranslations = await phraseTranslationsPromise;
+
 	const phraseLower = phrase.toLowerCase().replace( /\s+/gu, ' ' );
-	return phraseTranslationsPromise.then( phraseTranslations => {
-		const storedTranslation = phraseTranslations.translations?.[origin]?.[target]?.[phraseLower];
 
-		if ( storedTranslation !== undefined ) {
-			return storedTranslation;
+	const storedTranslation = phraseTranslations.translations?.[origin]?.[target]?.[phraseLower];
+	if ( storedTranslation !== undefined ) {
+		return storedTranslation;
+	}
+
+	let translationResult = undefined;
+
+	const queuedTranslation = translationQueue.catch( () => Date.now() ).then( async lastTranslationTime => {
+		const latestStoredTranslation = phraseTranslations.translations?.[origin]?.[target]?.[phraseLower];
+
+		if ( latestStoredTranslation !== undefined ) {
+			translationResult = latestStoredTranslation;
+			return lastTranslationTime;
 		}
 
-		translationQueue = translationQueue.catch( () => null ).then( async () => {
-			const latestStoredTranslation = phraseTranslations.translations?.[origin]?.[target]?.[phraseLower];
+		const today = new Date().toISOString()
+			.slice( 0, 10 );
+		if ( phraseTranslations.date !== today ) {
+			phraseTranslations.date = today;
+			phraseTranslations.requestCount = 0;
+		}
 
-			if ( latestStoredTranslation !== undefined ) {
-				return latestStoredTranslation;
-			}
+		if ( phraseTranslations.requestCount >= MAX_PHRASE_TRANSLATIONS_PER_DAY ) {
+			return lastTranslationTime;
+		}
 
-			const today = new Date().toISOString()
-				.slice( 0, 10 );
-			if ( phraseTranslations.date !== today ) {
-				phraseTranslations.date = today;
-				phraseTranslations.requestCount = 0;
-			}
+		phraseTranslations.requestCount = ( phraseTranslations.requestCount ?? 0 ) + 1;
+		await browser.storage.local.set({ phraseTranslations });
+		await new Promise( resolve => setTimeout(
+			resolve,
+			( lastTranslationTime + PHRASE_TRANSLATION_DELAY ) - Date.now()
+		) );
 
-			if ( phraseTranslations.requestCount >= MAX_PHRASE_TRANSLATIONS_PER_DAY ) {
-				return undefined;
-			}
-
-			phraseTranslations.requestCount = ( phraseTranslations.requestCount ?? 0 ) + 1;
-			await browser.storage.local.set({ phraseTranslations });
-			await new Promise( resolve => setTimeout( resolve, PHRASE_TRANSLATION_DELAY ) );
-
-			const response = await translate( phraseLower, {
-				from: origin,
-				to: target,
-				forceBatch: false
-			});
-			const translated = response.text.toLowerCase();
-
-			phraseTranslations.translations ??= {};
-			phraseTranslations.translations[origin] ??= {};
-			phraseTranslations.translations[origin][target] ??= {};
-			phraseTranslations.translations[origin][target][phraseLower] = translated;
-			await browser.storage.local.set({ phraseTranslations });
-
-			return translated;
+		const requestTime = Date.now();
+		const response = await translate( phraseLower, {
+			from: origin,
+			to: target,
+			forceBatch: false
 		});
+		translationResult = response.text.toLowerCase();
 
-		return translationQueue;
+		phraseTranslations.translations ??= {};
+		phraseTranslations.translations[origin] ??= {};
+		phraseTranslations.translations[origin][target] ??= {};
+		phraseTranslations.translations[origin][target][phraseLower] = translationResult;
+		await browser.storage.local.set({ phraseTranslations });
+
+		return requestTime;
 	});
+
+	translationQueue = queuedTranslation;
+
+	await queuedTranslation;
+	return translationResult;
 }
 
 export default translatePhrase;
