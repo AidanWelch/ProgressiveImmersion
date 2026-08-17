@@ -113,7 +113,9 @@ function translatePhrase ( matchedWords, textNode, intersectionTarget, dictionar
 
 		if ( originalPhrase.toUpperCase() === originalPhrase ) {
 			translation = translation.toUpperCase();
-		} else if ( originalPhrase.toLowerCase() !== originalPhrase ) {
+		} else if (
+			originalPhrase.charAt( 0 ).toUpperCase() + originalPhrase.toLowerCase().slice( 1 ) === originalPhrase
+		) {
 			translation = translation.charAt( 0 ).toUpperCase() + translation.slice( 1 );
 		}
 
