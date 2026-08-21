@@ -1,0 +1,32 @@
+name: Publish Chrome
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build v3
+        run: npm run build-v3
+
+      - name: Publish to Chrome Web Store
+        uses: mobilefirstllc/cws-publish@latest
+        with:
+          action: 'publish' 
+          client_id: ${{ secrets.CHROME_CLIENT }}
+          client_secret: ${{ secrets.CHROME_SECRET }}
+          refresh_token: ${{ secrets.CHROME_TOKEN }}
+          extension_id: ${{ secrets.CHROME_EXTENSION_ID }}
+          zip_file: 'web-ext-artifacts/progressiveimmersion_v3.zip'

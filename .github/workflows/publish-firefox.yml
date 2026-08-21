@@ -1,4 +1,4 @@
-name: publish
+name: Publish Firefox
 
 on:
   workflow_dispatch:
@@ -7,25 +7,22 @@ on:
       - 'v*'
 
 jobs:
-  build:
+  publish:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
         with:
           node-version: 24
-      
+
       - name: Zip source code
-        run: git archive --format zip --output ./source.zip HEAD 
+        run: git archive --format zip --output ./source.zip HEAD
 
       - name: Install dependencies
         run: npm install
-      
+
       - name: Build v2
         run: npm run build-v2
-
-      - name: Build v3
-        run: npm run build-v3
 
       - name: Publish to Firefox Addon Store
         uses: wdzeng/firefox-addon@v1
@@ -36,14 +33,3 @@ jobs:
           self-hosted: false
           jwt-issuer: ${{ secrets.FIREFOX_JWT_ISSUER }}
           jwt-secret: ${{ secrets.FIREFOX_JWT_SECRET }}
-
-      - name: Publish to Chrome Web Store
-        uses: mobilefirstllc/cws-publish@latest
-        with:
-          action: 'publish' 
-          client_id: ${{ secrets.CHROME_CLIENT }}
-          client_secret: ${{ secrets.CHROME_SECRET }}
-          refresh_token: ${{ secrets.CHROME_TOKEN }}
-          extension_id: ${{ secrets.CHROME_EXTENSION_ID }}
-          zip_file: 'web-ext-artifacts/progressiveimmersion_v3.zip'
-
