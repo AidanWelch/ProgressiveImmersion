@@ -70,10 +70,12 @@ function checkAncestorInTags ( node, tags ) {
 }
 
 function checkShouldTranslateNode ( node ) {
-	return TAGS_TO_TRANSLATE.includes( node.tagName ) || (
-		TAGS_TO_TRANSLATE_WHEN_NESTED_IN_TRACKED_TAGS.includes( node.tagName ) &&
-		checkAncestorInTags( node, TAGS_TO_TRANSLATE )
-	);
+	return (
+		TAGS_TO_TRANSLATE.includes( node.tagName ) || (
+			TAGS_TO_TRANSLATE_WHEN_NESTED_IN_TRACKED_TAGS.includes( node.tagName ) &&
+			checkAncestorInTags( node, TAGS_TO_TRANSLATE )
+		)
+	) && !node.isContentEditable;
 }
 
 browser.storage.local.get( [ 'state', 'dictionary', 'origin', 'target', 'minWordLength', 'exclusionList', 'exclusionListMode', 'phraseTranslationEnabled' ] ).then( value => {
