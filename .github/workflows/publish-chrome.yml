@@ -22,11 +22,9 @@ jobs:
         run: npm run build-v3
 
       - name: Publish to Chrome Web Store
-        uses: mobilefirstllc/cws-publish@latest
-        with:
-          action: 'publish' 
-          client_id: ${{ secrets.CHROME_CLIENT }}
-          client_secret: ${{ secrets.CHROME_SECRET }}
-          refresh_token: ${{ secrets.CHROME_TOKEN }}
-          extension_id: ${{ secrets.CHROME_EXTENSION_ID }}
-          zip_file: 'web-ext-artifacts/progressiveimmersion_v3.zip'
+        run: npx chrome-webstore-upload-cli@3 --source web-ext-artifacts/progressiveimmersion_v3.zip
+        env:
+          EXTENSION_ID: ${{ secrets.CHROME_EXTENSION_ID }}
+          CLIENT_ID: ${{ secrets.CHROME_CLIENT }}
+          CLIENT_SECRET: ${{ secrets.CHROME_SECRET }}
+          REFRESH_TOKEN: ${{ secrets.CHROME_TOKEN }}
