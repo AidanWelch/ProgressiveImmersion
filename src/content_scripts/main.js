@@ -69,13 +69,26 @@ function checkAncestorInTags ( node, tags ) {
 	return node.parentNode !== null ? checkAncestorInTags( node.parentNode, tags ) : false;
 }
 
-function checkShouldTranslateNode ( node ) {
+function compareBCP47 ( a, b ) {
+	if ( a === 'auto' || b === 'auto' ) {
+		return true;
+	}
+
+	a = new Intl.Locale( a ).language;
+	b = new Intl.Locale( b ).language;
+	return a === b;
+}
+
+function checkShouldTranslateNode ( node, originLang ) {
 	return (
 		TAGS_TO_TRANSLATE.includes( node.tagName ) || (
 			TAGS_TO_TRANSLATE_WHEN_NESTED_IN_TRACKED_TAGS.includes( node.tagName ) &&
 			checkAncestorInTags( node, TAGS_TO_TRANSLATE )
 		)
-	) && !node.isContentEditable;
+	) && !node.isContentEditable && (
+		node.lang.length === 0 ||
+		compareBCP47( originLang, node.lang )
+	);
 }
 
 browser.storage.local.get( [ 'state', 'dictionary', 'origin', 'target', 'minWordLength', 'exclusionList', 'exclusionListMode', 'phraseTranslationEnabled' ] ).then( value => {
@@ -94,6 +107,13 @@ browser.storage.local.get( [ 'state', 'dictionary', 'origin', 'target', 'minWord
 		});
 
 		enabledForThisPage = value.exclusionListMode === 'whitelist' ? inList : !inList;
+	}
+
+	if (
+		document.documentElement.lang.length > 0 &&
+		!compareBCP47( value.origin, document.documentElement.lang )
+	) {
+		enabledForThisPage = false;
 	}
 
 	if ( !enabledForThisPage || !value.state ){
@@ -206,7 +226,13 @@ browser.storage.local.get( [ 'state', 'dictionary', 'origin', 'target', 'minWord
 	// then probably the solution will be just analyzing text nodes
 	const mutationObserver = new MutationObserver( function ( mutationRecords ) {
 		for ( const mutation of mutationRecords ) {
-			if ( ( mutation.type === 'characterData' || mutation.type === 'attributes' ) && mutation.target.innerText && checkShouldTranslateNode( mutation.target ) ) {
+			if (
+				(
+					mutation.type === 'characterData' ||
+					mutation.type === 'attributes'
+				) && mutation.target.innerText &&
+				checkShouldTranslateNode( mutation.target, origin )
+			) {
 				viewObserver.observe( mutation.target ); // make sure it is being observed
 				return;
 			}
@@ -218,7 +244,7 @@ browser.storage.local.get( [ 'state', 'dictionary', 'origin', 'target', 'minWord
 			for ( const addedNode of mutation.addedNodes ) {
 				( function observeNodesAndChildren ( node ){
 					if (
-						checkShouldTranslateNode( node )
+						checkShouldTranslateNode( node, origin )
 					) {
 						if ( node.innerText ) {
 							viewObserver.observe( node );
